@@ -1336,6 +1336,20 @@
           </table>
         </div>
 
+           <!-- Email List -->
+        <div class="admin-card" style="grid-column:1/-1;">
+          <h3>📧 Email List</h3>
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Copy and paste directly into the BCC field of any email. Participants without an email are listed by name only below.</p>
+          <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+            <button class="btn-secondary" onclick="copyEmails('all')">Copy All Emails</button>
+            <button class="btn-secondary" onclick="copyEmails('paid')">Copy Paid Only</button>
+            <button class="btn-secondary" onclick="copyEmails('unpaid')">Copy Unpaid Only</button>
+          </div>
+          <div id="emailListBox" style="background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:16px;font-family:monospace;font-size:13px;color:var(--ice-dim);line-height:1.8;min-height:60px;word-break:break-all;"></div>
+          <div id="emailListNoEmail" style="margin-top:12px;"></div>
+          <div id="copyConfirm" style="display:none;margin-top:10px;font-size:13px;color:#64e096;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;">✓ Copied to clipboard!</div>
+        </div>
+
         <!-- Controls -->
         <div class="admin-card">
           <h3>⚙️ Tournament Controls</h3>
@@ -1993,6 +2007,7 @@ function checkAdmin() {
 function renderAdmin() {
   renderAdminResults();
   renderAdminParticipants();
+  renderEmailList();
   renderAdminPot();
   document.getElementById('submissionToggleText').textContent =
     state.submissionsOpen ? 'Close Submissions' : 'Open Submissions';
@@ -2135,6 +2150,51 @@ function renderAdminPot() {
   `;
 }
 
+function renderEmailList() {
+  const withEmail = state.participants.filter(p => p.email);
+  const noEmail   = state.participants.filter(p => !p.email);
+  showEmailGroup(withEmail, noEmail);
+}
+
+function showEmailGroup(withEmail, noEmail) {
+  const box = document.getElementById('emailListBox');
+  const noEmailDiv = document.getElementById('emailListNoEmail');
+
+  if (withEmail.length === 0) {
+    box.textContent = 'No participants have provided an email address yet.';
+  } else {
+    box.textContent = withEmail.map(p => p.email).join(', ');
+  }
+
+  if (noEmail.length > 0) {
+    noEmailDiv.innerHTML = `
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">No email provided (${noEmail.length})</div>
+      <div style="font-size:13px;color:var(--text-dim);">${noEmail.map(p => p.name).join(', ')}</div>
+    `;
+  } else {
+    noEmailDiv.innerHTML = '';
+  }
+}
+
+function copyEmails(filter) {
+  let group = state.participants;
+  if (filter === 'paid')   group = state.participants.filter(p => p.paid);
+  if (filter === 'unpaid') group = state.participants.filter(p => !p.paid);
+
+  const withEmail = group.filter(p => p.email);
+  const noEmail   = group.filter(p => !p.email);
+  showEmailGroup(withEmail, noEmail);
+
+  const text = withEmail.map(p => p.email).join(', ');
+  if (!text) { alert('No email addresses found for that filter.'); return; }
+
+  navigator.clipboard.writeText(text).then(() => {
+    const confirm = document.getElementById('copyConfirm');
+    confirm.style.display = 'block';
+    setTimeout(() => confirm.style.display = 'none', 2500);
+  });
+}
+  
 function togglePaid(name) {
   const p = state.participants.find(x => x.name === name);
   if (p) { p.paid = !p.paid; setState(state); renderAdmin(); renderLeaderboard(); }
