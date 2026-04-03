@@ -1093,6 +1093,105 @@
     .modal { padding: 24px; }
   }
 
+   /* ── SIGNUP / COUNTDOWN ── */
+  .countdown-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto 48px;
+  }
+  .countdown-unit {
+    background: rgba(255,184,28,0.07);
+    border: 1px solid rgba(255,184,28,0.25);
+    border-radius: 4px;
+    padding: 24px 12px 16px;
+    text-align: center;
+  }
+  .countdown-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .countdown-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 6px;
+    display: block;
+  }
+  .countdown-gone {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #64e096;
+    text-align: center;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .signup-card {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    backdrop-filter: blur(12px);
+    padding: 36px;
+    text-align: center;
+  }
+  .signup-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ice);
+    margin-bottom: 8px;
+  }
+  .signup-card p {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .signup-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .signup-success {
+    display: none;
+    background: rgba(50,200,100,0.1);
+    border: 1.5px solid rgba(50,200,100,0.3);
+    border-radius: 3px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .signup-success.show { display: block; }
+  .signup-success h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 900;
+    color: #64e096; text-transform: uppercase;
+    letter-spacing: 2px; margin-bottom: 4px;
+  }
+  .signup-success p { font-size:13px; color:var(--text-dim); margin-bottom:0; }
+  .signup-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 20px;
+    letter-spacing: 1px;
+  }
+  .signup-count span { color: var(--gold); font-weight: 700; }
+  
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(16px); }
@@ -1143,7 +1242,8 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <button class="nav-btn active" onclick="showSection('submit')">Submit Bracket</button>
+    <button class="nav-btn active" onclick="showSection('signup')">Sign Up</button>
+    <button class="nav-btn" onclick="showSection('submit')">Submit Bracket</button>
     <button class="nav-btn" onclick="showSection('leaderboard')">Leaderboard</button>
     <button class="nav-btn" onclick="showSection('brackets')">View Brackets</button>
     <button class="nav-btn" onclick="showSection('results')">Series Results</button>
@@ -1151,9 +1251,41 @@
   </nav>
 
   <!-- ════════════════════════════════
+     SIGN UP / COUNTDOWN
+════════════════════════════════ -->
+<section id="signup" class="section active">
+  <div style="text-align:center;margin-bottom:40px;">
+    <p class="section-title">2025 NHL Playoffs</p>
+    <h2 class="section-heading" style="margin-bottom:8px;">Brackets Open In</h2>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:36px;">Sign up below to get notified the moment bracket submissions open.</p>
+  </div>
+  <div id="countdownDisplay"></div>
+  <div class="signup-card">
+    <h3>Get Notified</h3>
+    <p>Drop your name and email and you'll be the first to know when brackets open. No spam — just the one email when it's go time.</p>
+    <div class="signup-fields">
+      <div style="text-align:left;">
+        <label class="field-label">Your Name</label>
+        <input type="text" class="field-input" id="signupName" placeholder="e.g. Matt Davis">
+      </div>
+      <div style="text-align:left;">
+        <label class="field-label">Email Address</label>
+        <input type="email" class="field-input" id="signupEmail" placeholder="you@email.com">
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;" onclick="submitSignup()">Notify Me When Brackets Open</button>
+    <div class="signup-success" id="signupSuccess">
+      <h4>🎉 You're on the list!</h4>
+      <p>We'll email you as soon as bracket submissions open. See you on the ice.</p>
+    </div>
+    <div class="signup-count" id="signupCount"></div>
+  </div>
+</section>
+  
+  <!-- ════════════════════════════════
        SUBMIT BRACKET
   ════════════════════════════════ -->
-  <section id="submit" class="section active">
+  <section id="submit" class="section">
     <div class="submit-intro">
       <p class="section-title">2026 Playoffs</p>
       <h2 class="section-heading">Submit Your Bracket</h2>
@@ -1319,6 +1451,16 @@
           </div>
         </div>
 
+        <div class="admin-card" ...>
+  <h3>📋 Enter Series Results</h3>
+  ...
+</div>
+
+<div class="admin-card" ...>
+  <h3>👥 Participants & Buy-In Tracking</h3>
+  ...
+</div>
+        
         <!-- Participants -->
         <div class="admin-card" style="grid-column:1/-1;">
           <h3>👥 Participants & Buy-In Tracking</h3>
@@ -1737,6 +1879,82 @@ function submitBracket() {
 }
 
 // ════════════════════════════════════════
+// SIGN UP & COUNTDOWN
+// ⬇️ Change this date to your bracket open date
+const BRACKET_OPEN_DATE = new Date('2025-04-12T00:00:00');
+// ════════════════════════════════════════
+
+function renderCountdown() {
+  const container = document.getElementById('countdownDisplay');
+  if (!container) return;
+  const diff = BRACKET_OPEN_DATE - new Date();
+
+  if (diff <= 0) {
+    container.innerHTML = `<div class="countdown-gone">🏒 Brackets Are Open — Submit Yours Now!</div>`;
+    return;
+  }
+
+  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours   = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  container.innerHTML = `
+    <div class="countdown-bar">
+      <div class="countdown-unit">
+        <span class="countdown-number">${days}</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number">${String(hours).padStart(2,'0')}</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number">${String(minutes).padStart(2,'0')}</span>
+        <span class="countdown-label">Minutes</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number">${String(seconds).padStart(2,'0')}</span>
+        <span class="countdown-label">Seconds</span>
+      </div>
+    </div>
+  `;
+}
+
+setInterval(renderCountdown, 1000);
+renderCountdown();
+
+function submitSignup() {
+  const name  = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  if (!name)  { alert('Please enter your name.');  return; }
+  if (!email) { alert('Please enter your email.'); return; }
+
+  const signups = JSON.parse(localStorage.getItem('nhl_signups_2025') || '[]');
+  if (signups.find(s => s.email.toLowerCase() === email.toLowerCase())) {
+    alert('That email is already signed up!'); return;
+  }
+
+  signups.push({ name, email, date: new Date().toISOString() });
+  localStorage.setItem('nhl_signups_2025', JSON.stringify(signups));
+
+  document.getElementById('signupSuccess').classList.add('show');
+  document.getElementById('signupName').value  = '';
+  document.getElementById('signupEmail').value = '';
+  updateSignupCount();
+}
+
+function updateSignupCount() {
+  const signups = JSON.parse(localStorage.getItem('nhl_signups_2025') || '[]');
+  const el = document.getElementById('signupCount');
+  if (el && signups.length > 0) {
+    el.innerHTML = `<span>${signups.length}</span> ${signups.length === 1 ? 'person' : 'people'} signed up so far`;
+  }
+}
+
+updateSignupCount();
+  
+// ════════════════════════════════════════
 // SCORING ENGINE
 // ════════════════════════════════════════
 
@@ -2005,6 +2223,7 @@ function checkAdmin() {
 }
 
 function renderAdmin() {
+  renderSignupList();
   renderAdminResults();
   renderAdminParticipants();
   renderEmailList();
@@ -2194,6 +2413,24 @@ function copyEmails(filter) {
     setTimeout(() => confirm.style.display = 'none', 2500);
   });
 }
+
+function renderSignupList() {
+  const signups = JSON.parse(localStorage.getItem('nhl_signups_2025') || '[]');
+  const existing = document.getElementById('adminSignupList');
+  if (!existing) return;
+  existing.innerHTML = signups.length === 0
+    ? '<p style="color:var(--text-dim);font-size:13px;">No signups yet.</p>'
+    : `<div style="font-size:13px;color:var(--text-dim);margin-bottom:12px;"><span style="color:var(--gold);font-weight:700;">${signups.length}</span> people signed up</div>
+       <div style="background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:16px;font-family:monospace;font-size:13px;color:var(--ice-dim);line-height:2;word-break:break-all;">
+         ${signups.map(s => s.email).join(', ')}
+       </div>
+       <button class="btn-secondary" style="margin-top:12px;" onclick="copySignupEmails()">Copy All Emails</button>`;
+}
+
+function copySignupEmails() {
+  const signups = JSON.parse(localStorage.getItem('nhl_signups_2025') || '[]');
+  navigator.clipboard.writeText(signups.map(s => s.email).join(', '));
+  alert('Copied!');
   
 function togglePaid(name) {
   const p = state.participants.find(x => x.name === name);
