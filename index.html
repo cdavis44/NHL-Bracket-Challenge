@@ -7,207 +7,212 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ice: #e8f4f8; --ice-dim: #b8d4de; --rink: #0a1628; --rink-mid: #0f2040;
-    --rink-light: #162d52; --gold: #ffb81c; --west: #1a6fc4; --east: #c8102e;
-    --text: #e8f4f8; --text-dim: #7a9db5; --border: rgba(232,244,248,0.12);
-    --glass: rgba(15,32,64,0.7);
+    --ice:#e8f4f8; --ice-dim:#b8d4de; --rink:#0a1628; --rink-mid:#0f2040;
+    --gold:#ffb81c; --west:#1a6fc4; --east:#c8102e;
+    --text:#e8f4f8; --text-dim:#7a9db5;
+    --border:rgba(232,244,248,0.12); --glass:rgba(15,32,64,0.7);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Barlow',sans-serif; background:var(--rink); color:var(--text); min-height:100vh; overflow-x:hidden; }
-  body::before {
-    content:''; position:fixed; inset:0; z-index:0;
-    background: repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(232,244,248,0.015) 60px,rgba(232,244,248,0.015) 61px),
-      repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(232,244,248,0.01) 80px,rgba(232,244,248,0.01) 81px),
-      radial-gradient(ellipse at 20% 50%,rgba(26,111,196,0.08) 0%,transparent 50%),
-      radial-gradient(ellipse at 80% 20%,rgba(200,16,46,0.06) 0%,transparent 40%),
-      linear-gradient(180deg,#060e1e 0%,#0a1628 40%,#0d1e38 100%);
-    pointer-events:none;
-  }
-  body::after { content:''; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:600px; height:600px; border-radius:50%; border:2px solid rgba(232,244,248,0.04); pointer-events:none; z-index:0; }
-  .page { position:relative; z-index:1; }
-  header { text-align:center; padding:56px 24px 40px; }
-  .header-year { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:6px; color:var(--gold); text-transform:uppercase; margin-bottom:12px; }
-  header h1 { font-family:'Barlow Condensed',sans-serif; font-size:clamp(42px,8vw,84px); font-weight:900; line-height:0.9; text-transform:uppercase; letter-spacing:-1px; color:var(--ice); }
-  header h1 span { color:var(--gold); display:block; }
-  .header-sub { margin-top:16px; font-size:14px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; }
-  .header-line { width:60px; height:3px; background:var(--gold); margin:24px auto 0; }
-  .nav { display:flex; justify-content:center; gap:4px; padding:0 24px 40px; flex-wrap:wrap; }
-  .nav-btn { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:12px 28px; border:1.5px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; transition:all 0.2s; border-radius:2px; }
-  .nav-btn:hover { border-color:var(--ice-dim); color:var(--ice); }
-  .nav-btn.active { background:var(--gold); border-color:var(--gold); color:var(--rink); }
-  .section { display:none; padding:0 24px 80px; max-width:1400px; margin:0 auto; }
-  .section.active { display:block; animation:fadeUp 0.3s ease; }
-  .section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
-  .section-heading { font-family:'Barlow Condensed',sans-serif; font-size:36px; font-weight:900; text-transform:uppercase; color:var(--ice); margin-bottom:32px; line-height:1; }
-  .card { background:var(--glass); border:1px solid var(--border); border-radius:4px; backdrop-filter:blur(12px); padding:32px; }
-  .field-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; display:block; }
-  .field-input { width:100%; background:rgba(232,244,248,0.05); border:1.5px solid var(--border); border-radius:2px; padding:12px 16px; font-family:'Barlow',sans-serif; font-size:15px; color:var(--ice); outline:none; transition:border-color 0.2s; }
-  .field-input:focus { border-color:var(--gold); }
-  .field-input::placeholder { color:var(--text-dim); }
-  .btn-primary { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:900; letter-spacing:3px; text-transform:uppercase; padding:16px 40px; background:var(--gold); color:var(--rink); border:none; border-radius:2px; cursor:pointer; transition:all 0.2s; }
-  .btn-primary:hover { background:#ffc840; transform:translateY(-1px); box-shadow:0 8px 24px rgba(255,184,28,0.25); }
-  .btn-primary:active { transform:translateY(0); }
-  .btn-primary:disabled { background:var(--text-dim); cursor:not-allowed; transform:none; box-shadow:none; }
-  .btn-secondary { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; background:transparent; color:var(--ice); border:1.5px solid var(--border); border-radius:2px; cursor:pointer; transition:all 0.2s; }
-  .btn-secondary:hover { border-color:var(--ice-dim); }
-  .btn-danger { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; background:rgba(200,16,46,0.15); color:#e86070; border:1.5px solid rgba(200,16,46,0.3); border-radius:2px; cursor:pointer; transition:all 0.2s; }
-  .divider { height:1px; background:var(--border); margin:40px 0; }
-  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(232,244,248,0.2); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .loading-msg { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; padding:20px 0; display:flex; align-items:center; gap:8px; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Barlow',sans-serif;background:var(--rink);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(232,244,248,0.015) 60px,rgba(232,244,248,0.015) 61px),
+    repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(232,244,248,0.01) 80px,rgba(232,244,248,0.01) 81px),
+    radial-gradient(ellipse at 20% 50%,rgba(26,111,196,0.08) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(200,16,46,0.06) 0%,transparent 40%),
+    linear-gradient(180deg,#060e1e 0%,#0a1628 40%,#0d1e38 100%);
+    pointer-events:none;}
+  body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:2px solid rgba(232,244,248,0.04);pointer-events:none;z-index:0;}
+  .page{position:relative;z-index:1;}
+
+  /* HEADER */
+  header{text-align:center;padding:56px 24px 40px;}
+  .header-year{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+  header h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(42px,8vw,84px);font-weight:900;line-height:0.9;text-transform:uppercase;letter-spacing:-1px;color:var(--ice);}
+  header h1 span{color:var(--gold);display:block;}
+  .header-sub{margin-top:16px;font-size:14px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;}
+  .header-line{width:60px;height:3px;background:var(--gold);margin:24px auto 0;}
+
+  /* NAV */
+  .nav{display:flex;justify-content:center;gap:4px;padding:0 24px 40px;flex-wrap:wrap;}
+  .nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 28px;border:1.5px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;border-radius:2px;}
+  .nav-btn:hover{border-color:var(--ice-dim);color:var(--ice);}
+  .nav-btn.active{background:var(--gold);border-color:var(--gold);color:var(--rink);}
+
+  /* SECTIONS */
+  .section{display:none;padding:0 24px 80px;max-width:1400px;margin:0 auto;}
+  .section.active{display:block;animation:fadeUp 0.3s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .section-heading{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;color:var(--ice);margin-bottom:32px;line-height:1;}
+
+  /* CARD */
+  .card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(12px);padding:32px;}
+
+  /* FORMS */
+  .field-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block;}
+  .field-input{width:100%;background:rgba(232,244,248,0.05);border:1.5px solid var(--border);border-radius:2px;padding:12px 16px;font-family:'Barlow',sans-serif;font-size:15px;color:var(--ice);outline:none;transition:border-color 0.2s;}
+  .field-input:focus{border-color:var(--gold);}
+  .field-input::placeholder{color:var(--text-dim);}
+
+  /* BUTTONS */
+  .btn-primary{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;background:var(--gold);color:var(--rink);border:none;border-radius:2px;cursor:pointer;transition:all 0.2s;}
+  .btn-primary:hover{background:#ffc840;transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,184,28,0.25);}
+  .btn-primary:active{transform:translateY(0);}
+  .btn-primary:disabled{background:var(--text-dim);cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-secondary{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;background:transparent;color:var(--ice);border:1.5px solid var(--border);border-radius:2px;cursor:pointer;transition:all 0.2s;}
+  .btn-secondary:hover{border-color:var(--ice-dim);}
+  .btn-danger{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;background:rgba(200,16,46,0.15);color:#e86070;border:1.5px solid rgba(200,16,46,0.3);border-radius:2px;cursor:pointer;}
+
+  .divider{height:1px;background:var(--border);margin:40px 0;}
+
+  /* SPINNER */
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(232,244,248,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-msg{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;padding:20px 0;display:flex;align-items:center;gap:8px;}
 
   /* COUNTDOWN */
-  .countdown-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:600px; margin:0 auto 48px; }
-  .countdown-unit { background:rgba(255,184,28,0.07); border:1px solid rgba(255,184,28,0.25); border-radius:4px; padding:24px 12px 16px; text-align:center; }
-  .countdown-number { font-family:'Barlow Condensed',sans-serif; font-size:52px; font-weight:900; color:var(--gold); line-height:1; display:block; }
-  .countdown-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-top:6px; display:block; }
-  .countdown-gone { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; color:#64e096; text-align:center; letter-spacing:3px; text-transform:uppercase; margin-bottom:32px; }
+  .countdown-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:600px;margin:0 auto 48px;}
+  .countdown-unit{background:rgba(255,184,28,0.07);border:1px solid rgba(255,184,28,0.25);border-radius:4px;padding:24px 12px 16px;text-align:center;}
+  .countdown-number{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;color:var(--gold);line-height:1;display:block;}
+  .countdown-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-top:6px;display:block;}
+  .countdown-gone{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#64e096;text-align:center;letter-spacing:3px;text-transform:uppercase;margin-bottom:32px;}
 
   /* SIGNUP */
-  .signup-card { max-width:500px; margin:0 auto; background:var(--glass); border:1px solid var(--border); border-radius:4px; backdrop-filter:blur(12px); padding:36px; text-align:center; }
-  .signup-card h3 { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:2px; color:var(--ice); margin-bottom:8px; }
-  .signup-card p { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
-  .signup-fields { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
-  .signup-success { display:none; background:rgba(50,200,100,0.1); border:1.5px solid rgba(50,200,100,0.3); border-radius:3px; padding:20px; margin-top:20px; }
-  .signup-success.show { display:block; }
-  .signup-success h4 { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:900; color:#64e096; text-transform:uppercase; letter-spacing:2px; margin-bottom:4px; }
-  .signup-success p { font-size:13px; color:var(--text-dim); margin-bottom:0; }
-  .signup-count { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--text-dim); margin-top:20px; letter-spacing:1px; }
-  .signup-count span { color:var(--gold); font-weight:700; }
+  .signup-card{max-width:500px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(12px);padding:36px;text-align:center;}
+  .signup-card h3{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--ice);margin-bottom:8px;}
+  .signup-card p{font-size:14px;color:var(--text-dim);margin-bottom:24px;line-height:1.6;}
+  .signup-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+  .signup-success{display:none;background:rgba(50,200,100,0.1);border:1.5px solid rgba(50,200,100,0.3);border-radius:3px;padding:20px;margin-top:20px;}
+  .signup-success.show{display:block;}
+  .signup-success h4{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#64e096;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
+  .signup-success p{font-size:13px;color:var(--text-dim);margin-bottom:0;}
 
   /* BRACKET */
-  .name-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:40px; max-width:600px; }
-  .bracket-layout { display:grid; grid-template-columns:1fr auto 1fr; gap:0; margin-bottom:40px; }
-  .conference-label { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; letter-spacing:3px; text-transform:uppercase; text-align:center; padding:14px; margin-bottom:16px; border-radius:2px; }
-  .conf-west { background:var(--west); color:white; }
-  .conf-east { background:var(--east); color:white; }
-  .bracket-side { display:flex; flex-direction:column; }
-  .rounds-container { display:flex; gap:0; align-items:stretch; }
-  .round-col { flex:1; display:flex; flex-direction:column; }
-  .round-header { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); text-align:center; padding:8px 4px; border-bottom:1px solid var(--border); margin-bottom:8px; }
-  .round-header span { color:var(--gold); font-size:9px; display:block; margin-top:2px; }
-  .series-slot { margin:4px; flex:1; display:flex; align-items:center; justify-content:center; }
-  .series-card { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:10px; width:100%; transition:border-color 0.2s; }
-  .series-card.complete { border-color:rgba(255,184,28,0.4); }
-  .team-option { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:2px; cursor:pointer; transition:background 0.15s; border:1.5px solid transparent; margin-bottom:4px; }
-  .team-option:last-child { margin-bottom:0; }
-  .team-option:hover { background:rgba(232,244,248,0.07); }
-  .team-option.selected { background:rgba(255,184,28,0.12); border-color:var(--gold); }
-  .team-radio { width:14px; height:14px; border:1.5px solid var(--text-dim); border-radius:50%; flex-shrink:0; position:relative; }
-  .team-option.selected .team-radio { border-color:var(--gold); background:var(--gold); }
-  .team-option.selected .team-radio::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:5px; height:5px; background:var(--rink); border-radius:50%; }
-  .team-name { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.5px; color:var(--ice); flex:1; }
-  .games-row { display:flex; align-items:center; justify-content:space-between; margin-top:6px; padding-top:6px; border-top:1px solid var(--border); }
-  .games-label { font-size:10px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
-  .games-options { display:flex; gap:4px; }
-  .game-btn { width:26px; height:26px; background:transparent; border:1px solid var(--border); border-radius:2px; color:var(--text-dim); font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
-  .game-btn:hover { border-color:var(--ice-dim); color:var(--ice); }
-  .game-btn.selected { background:var(--gold); border-color:var(--gold); color:var(--rink); }
-  .cup-center { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 16px; min-width:200px; }
-  .cup-trophy { font-size:48px; margin-bottom:12px; filter:drop-shadow(0 0 20px rgba(255,184,28,0.5)); }
-  .cup-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--gold); text-align:center; margin-bottom:16px; }
-  .cup-matchup { background:rgba(255,184,28,0.08); border:1.5px solid rgba(255,184,28,0.3); border-radius:4px; padding:16px; width:100%; text-align:center; }
-  .cup-vs { font-family:'Barlow Condensed',sans-serif; font-size:11px; color:var(--text-dim); letter-spacing:2px; margin:6px 0; }
-  .cup-team { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; color:var(--ice-dim); min-height:22px; }
-  .player-picks-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:32px; }
-  .player-pick-card { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:16px; }
-  .pick-category { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
-  .pick-option { display:flex; align-items:center; gap:8px; padding:7px 8px; border-radius:2px; cursor:pointer; border:1.5px solid transparent; transition:all 0.15s; margin-bottom:4px; }
-  .pick-option:hover { background:rgba(232,244,248,0.05); }
-  .pick-option.selected { background:rgba(255,184,28,0.1); border-color:rgba(255,184,28,0.4); }
-  .pick-radio { width:12px; height:12px; border:1.5px solid var(--text-dim); border-radius:50%; flex-shrink:0; position:relative; }
-  .pick-option.selected .pick-radio { border-color:var(--gold); background:var(--gold); }
-  .pick-option.selected .pick-radio::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:4px; height:4px; background:var(--rink); border-radius:50%; }
-  .pick-player-name { font-size:13px; font-weight:500; color:var(--ice); }
-  .pick-player-team { font-size:11px; color:var(--text-dim); margin-left:auto; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; }
-  .submit-row { display:flex; align-items:center; gap:20px; margin-top:40px; flex-wrap:wrap; }
-  .submit-note { font-size:13px; color:var(--text-dim); line-height:1.5; }
-  .submit-success { display:none; background:rgba(50,200,100,0.1); border:1.5px solid rgba(50,200,100,0.3); border-radius:3px; padding:20px 28px; margin-top:24px; }
-  .submit-success.show { display:block; }
-  .submit-success h3 { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; color:#64e096; text-transform:uppercase; letter-spacing:2px; margin-bottom:6px; }
-  .submit-success p { font-size:14px; color:var(--text-dim); }
-  .progress-info { font-size:13px; color:var(--text-dim); margin-bottom:16px; }
-  .progress-bar-outer { height:4px; background:rgba(232,244,248,0.08); border-radius:2px; margin-bottom:32px; overflow:hidden; }
-  .progress-bar-inner { height:100%; background:var(--gold); border-radius:2px; transition:width 0.4s ease; width:0%; }
+  .name-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;max-width:600px;}
+  .bracket-layout{display:grid;grid-template-columns:1fr auto 1fr;margin-bottom:40px;}
+  .conference-label{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:3px;text-transform:uppercase;text-align:center;padding:14px;margin-bottom:16px;border-radius:2px;}
+  .conf-west{background:var(--west);color:white;} .conf-east{background:var(--east);color:white;}
+  .bracket-side{display:flex;flex-direction:column;}
+  .rounds-container{display:flex;align-items:stretch;}
+  .round-col{flex:1;display:flex;flex-direction:column;}
+  .round-header{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);text-align:center;padding:8px 4px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+  .round-header span{color:var(--gold);font-size:9px;display:block;margin-top:2px;}
+  .series-slot{margin:4px;flex:1;display:flex;align-items:center;justify-content:center;}
+  .series-card{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:10px;width:100%;transition:border-color 0.2s;}
+  .series-card.complete{border-color:rgba(255,184,28,0.4);}
+  .team-option{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:2px;cursor:pointer;transition:background 0.15s;border:1.5px solid transparent;margin-bottom:4px;}
+  .team-option:last-child{margin-bottom:0;}
+  .team-option:hover{background:rgba(232,244,248,0.07);}
+  .team-option.selected{background:rgba(255,184,28,0.12);border-color:var(--gold);}
+  .team-radio{width:14px;height:14px;border:1.5px solid var(--text-dim);border-radius:50%;flex-shrink:0;position:relative;}
+  .team-option.selected .team-radio{border-color:var(--gold);background:var(--gold);}
+  .team-option.selected .team-radio::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;background:var(--rink);border-radius:50%;}
+  .team-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;color:var(--ice);flex:1;}
+  .games-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);}
+  .games-label{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
+  .games-options{display:flex;gap:4px;}
+  .game-btn{width:26px;height:26px;background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+  .game-btn:hover{border-color:var(--ice-dim);color:var(--ice);}
+  .game-btn.selected{background:var(--gold);border-color:var(--gold);color:var(--rink);}
+  .cup-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;min-width:200px;}
+  .cup-trophy{font-size:48px;margin-bottom:12px;filter:drop-shadow(0 0 20px rgba(255,184,28,0.5));}
+  .cup-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:16px;}
+  .cup-matchup{background:rgba(255,184,28,0.08);border:1.5px solid rgba(255,184,28,0.3);border-radius:4px;padding:16px;width:100%;text-align:center;}
+  .cup-vs{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin:6px 0;}
+  .cup-team{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--ice-dim);min-height:22px;}
+  .player-picks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px;}
+  .player-pick-card{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:16px;}
+  .pick-category{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+  .pick-option{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:2px;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;margin-bottom:4px;}
+  .pick-option:hover{background:rgba(232,244,248,0.05);}
+  .pick-option.selected{background:rgba(255,184,28,0.1);border-color:rgba(255,184,28,0.4);}
+  .pick-radio{width:12px;height:12px;border:1.5px solid var(--text-dim);border-radius:50%;flex-shrink:0;position:relative;}
+  .pick-option.selected .pick-radio{border-color:var(--gold);background:var(--gold);}
+  .pick-option.selected .pick-radio::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:4px;height:4px;background:var(--rink);border-radius:50%;}
+  .pick-player-name{font-size:13px;font-weight:500;color:var(--ice);}
+  .pick-player-team{font-size:11px;color:var(--text-dim);margin-left:auto;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+  .submit-row{display:flex;align-items:center;gap:20px;margin-top:40px;flex-wrap:wrap;}
+  .submit-note{font-size:13px;color:var(--text-dim);line-height:1.5;}
+  .submit-success{display:none;background:rgba(50,200,100,0.1);border:1.5px solid rgba(50,200,100,0.3);border-radius:3px;padding:20px 28px;margin-top:24px;}
+  .submit-success.show{display:block;}
+  .submit-success h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#64e096;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;}
+  .submit-success p{font-size:14px;color:var(--text-dim);}
+  .progress-info{font-size:13px;color:var(--text-dim);margin-bottom:16px;}
+  .progress-bar-outer{height:4px;background:rgba(232,244,248,0.08);border-radius:2px;margin-bottom:32px;overflow:hidden;}
+  .progress-bar-inner{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease;width:0%;}
 
   /* LEADERBOARD */
-  .pot-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:32px; }
-  .pot-card { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:20px 16px; text-align:center; }
-  .pot-card-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
-  .pot-card-value { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; color:var(--gold); }
-  .pot-card.gold { border-color:rgba(255,184,28,0.4); background:rgba(255,184,28,0.08); }
-  .pot-card.silver { border-color:rgba(200,200,220,0.3); }
-  .pot-card.bronze { border-color:rgba(180,120,60,0.3); }
-  .lb-table { width:100%; border-collapse:collapse; }
-  .lb-table th { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
-  .lb-table th.right { text-align:right; }
-  .lb-table td { padding:13px 16px; font-size:14px; color:var(--ice); border-bottom:1px solid rgba(232,244,248,0.05); vertical-align:middle; }
-  .lb-table td.right { text-align:right; }
-  .lb-table tr:hover td { background:rgba(232,244,248,0.03); cursor:pointer; }
-  .lb-rank { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; color:var(--text-dim); width:40px; }
-  .lb-rank.r1 { color:var(--gold); } .lb-rank.r2 { color:#b0b8c8; } .lb-rank.r3 { color:#c8834a; }
-  .lb-name { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; }
-  .lb-points { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; color:var(--gold); }
-  .paid-badge { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; border-radius:2px; background:rgba(50,200,100,0.15); color:#64e096; border:1px solid rgba(50,200,100,0.25); }
-  .unpaid-badge { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; border-radius:2px; background:rgba(200,16,46,0.15); color:#e86070; border:1px solid rgba(200,16,46,0.25); }
-  .viewer-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; margin-bottom:32px; }
-  .viewer-chip { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:2px; padding:12px 16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; }
-  .viewer-chip:hover { border-color:var(--gold); background:rgba(255,184,28,0.05); }
-  .viewer-chip-name { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; }
-  .viewer-chip-pts { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; color:var(--gold); }
-  .scores-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:24px; }
-  .score-card { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:16px; }
-  .score-round { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
-  .score-series { font-family:'Barlow Condensed',sans-serif; font-size:14px; color:var(--ice-dim); margin-bottom:4px; }
-  .score-result { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; color:var(--gold); }
-  .score-result.pending { font-size:14px; color:var(--text-dim); font-weight:400; }
+  .pot-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+  .pot-card{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:20px 16px;text-align:center;}
+  .pot-card-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+  .pot-card-value{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--gold);}
+  .pot-card.gold{border-color:rgba(255,184,28,0.4);background:rgba(255,184,28,0.08);}
+  .pot-card.silver{border-color:rgba(200,200,220,0.3);}
+  .pot-card.bronze{border-color:rgba(180,120,60,0.3);}
+  .lb-table{width:100%;border-collapse:collapse;}
+  .lb-table th{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .lb-table th.right{text-align:right;}
+  .lb-table td{padding:13px 16px;font-size:14px;color:var(--ice);border-bottom:1px solid rgba(232,244,248,0.05);vertical-align:middle;}
+  .lb-table td.right{text-align:right;}
+  .lb-table tr:hover td{background:rgba(232,244,248,0.03);cursor:pointer;}
+  .lb-rank{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text-dim);width:40px;}
+  .lb-rank.r1{color:var(--gold);} .lb-rank.r2{color:#b0b8c8;} .lb-rank.r3{color:#c8834a;}
+  .lb-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;}
+  .lb-points{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--gold);}
+  .paid-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:2px;background:rgba(50,200,100,0.15);color:#64e096;border:1px solid rgba(50,200,100,0.25);}
+  .unpaid-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:2px;background:rgba(200,16,46,0.15);color:#e86070;border:1px solid rgba(200,16,46,0.25);}
+
+  /* VIEWER */
+  .viewer-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:32px;}
+  .viewer-chip{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:2px;padding:12px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:space-between;}
+  .viewer-chip:hover{border-color:var(--gold);background:rgba(255,184,28,0.05);}
+  .viewer-chip-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;}
+  .viewer-chip-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold);}
+
+  /* RESULTS */
+  .scores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px;}
+  .score-card{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:16px;}
+  .score-round{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+  .score-series{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--ice-dim);margin-bottom:4px;}
+  .score-result{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--gold);}
+  .score-result.pending{font-size:14px;color:var(--text-dim);font-weight:400;}
 
   /* ADMIN */
-  .admin-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
-  .admin-card { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:20px; }
-  .admin-card h3 { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
-  .result-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-  .result-label { font-size:13px; color:var(--text-dim); width:180px; flex-shrink:0; }
-  .result-winner { flex:1; background:rgba(232,244,248,0.05); border:1px solid var(--border); border-radius:2px; padding:6px 10px; font-family:'Barlow',sans-serif; font-size:13px; color:var(--ice); outline:none; min-width:120px; }
-  .result-winner:focus { border-color:var(--gold); }
-  select.result-winner option { background:var(--rink-mid); }
-  .result-games { width:60px; background:rgba(232,244,248,0.05); border:1px solid var(--border); border-radius:2px; padding:6px 10px; font-family:'Barlow',sans-serif; font-size:13px; color:var(--ice); outline:none; text-align:center; }
-  .participants-table { width:100%; border-collapse:collapse; margin-top:12px; }
-  .participants-table th { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); }
-  .participants-table td { padding:10px 12px; font-size:13px; border-bottom:1px solid rgba(232,244,248,0.04); }
-  .toggle-paid { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:2px; cursor:pointer; border:none; background:rgba(232,244,248,0.08); color:var(--text-dim); transition:all 0.15s; }
-  .toggle-paid:hover { background:rgba(50,200,100,0.15); color:#64e096; }
+  .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+  .admin-card{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:20px;}
+  .admin-card h3{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+  .result-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .result-label{font-size:13px;color:var(--text-dim);width:180px;flex-shrink:0;}
+  .result-winner{flex:1;background:rgba(232,244,248,0.05);border:1px solid var(--border);border-radius:2px;padding:6px 10px;font-family:'Barlow',sans-serif;font-size:13px;color:var(--ice);outline:none;min-width:120px;}
+  .result-winner:focus{border-color:var(--gold);}
+  select.result-winner option{background:var(--rink-mid);}
+  .result-games{width:60px;background:rgba(232,244,248,0.05);border:1px solid var(--border);border-radius:2px;padding:6px 10px;font-family:'Barlow',sans-serif;font-size:13px;color:var(--ice);outline:none;text-align:center;}
+  .participants-table{width:100%;border-collapse:collapse;margin-top:12px;}
+  .participants-table th{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+  .participants-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(232,244,248,0.04);}
+  .toggle-paid{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer;border:none;background:rgba(232,244,248,0.08);color:var(--text-dim);transition:all 0.15s;}
+  .toggle-paid:hover{background:rgba(50,200,100,0.15);color:#64e096;}
 
   /* MODAL */
-  .modal-overlay { display:none; position:fixed; inset:0; z-index:100; background:rgba(6,14,30,0.9); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:24px; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--rink-mid); border:1px solid var(--border); border-radius:4px; max-width:800px; width:100%; max-height:90vh; overflow-y:auto; padding:40px; position:relative; }
-  .modal-close { position:absolute; top:20px; right:20px; background:none; border:none; color:var(--text-dim); font-size:24px; cursor:pointer; }
-  .modal-close:hover { color:var(--ice); }
-  .modal-name { font-family:'Barlow Condensed',sans-serif; font-size:32px; font-weight:900; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:4px; }
-  .modal-subtitle { font-size:13px; color:var(--text-dim); margin-bottom:28px; }
-  .modal-section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin:24px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
-  .modal-picks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
-  .modal-pick-item { background:rgba(232,244,248,0.04); border:1px solid var(--border); border-radius:3px; padding:12px; }
-  .modal-pick-round { font-size:10px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
-  .modal-pick-team { font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; color:var(--ice); }
-  .modal-pick-games { font-size:11px; color:var(--gold); margin-top:2px; }
-  .modal-pick-item.correct { border-color:rgba(50,200,100,0.4); background:rgba(50,200,100,0.06); }
-  .modal-pick-item.incorrect { border-color:rgba(200,16,46,0.3); background:rgba(200,16,46,0.05); }
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(6,14,30,0.9);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:24px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--rink-mid);border:1px solid var(--border);border-radius:4px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;padding:40px;position:relative;}
+  .modal-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text-dim);font-size:24px;cursor:pointer;}
+  .modal-close:hover{color:var(--ice);}
+  .modal-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:4px;}
+  .modal-subtitle{font-size:13px;color:var(--text-dim);margin-bottom:28px;}
+  .modal-section-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  .modal-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+  .modal-pick-item{background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:12px;}
+  .modal-pick-round{font-size:10px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+  .modal-pick-team{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--ice);}
+  .modal-pick-games{font-size:11px;color:var(--gold);margin-top:2px;}
+  .modal-pick-item.correct{border-color:rgba(50,200,100,0.4);background:rgba(50,200,100,0.06);}
+  .modal-pick-item.incorrect{border-color:rgba(200,16,46,0.3);background:rgba(200,16,46,0.05);}
 
-  @media (max-width:900px) {
-    .bracket-layout { grid-template-columns:1fr; }
-    .cup-center { padding:24px 0; flex-direction:row; gap:16px; }
-    .admin-grid { grid-template-columns:1fr; }
-    .pot-bar { grid-template-columns:1fr 1fr; }
-    .name-row { grid-template-columns:1fr; }
-  }
-  @media (max-width:600px) {
-    .pot-bar { grid-template-columns:1fr 1fr; }
-    .modal { padding:24px; }
-    .countdown-bar { grid-template-columns:repeat(2,1fr); }
-  }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @media(max-width:900px){.bracket-layout{grid-template-columns:1fr;}.cup-center{padding:24px 0;flex-direction:row;gap:16px;}.admin-grid{grid-template-columns:1fr;}.pot-bar{grid-template-columns:1fr 1fr;}.name-row{grid-template-columns:1fr;}}
+  @media(max-width:600px){.pot-bar{grid-template-columns:1fr 1fr;}.modal{padding:24px;}.countdown-bar{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -257,7 +262,7 @@
     <div style="max-width:640px;margin-bottom:40px;">
       <p class="section-title">2026 Playoffs</p>
       <h2 class="section-heading">Submit Your Bracket</h2>
-      <p style="font-size:15px;color:var(--text-dim);line-height:1.7;">Pick the winner of every series and how many games it goes. You can also earn bonus points by predicting individual player stats. All picks must be submitted before puck drop of Game 1.</p>
+      <p style="font-size:15px;color:var(--text-dim);line-height:1.7;">Pick the winner of every series and how many games it goes. Bonus points for predicting player stats. All picks must be in before puck drop of Game 1.</p>
     </div>
     <div class="card">
       <p class="section-title">Your Info</p>
@@ -296,14 +301,14 @@
       </div>
       <div class="divider"></div>
       <p class="section-title">Bonus Player Picks</p>
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:4px;">Pick 1 player in each category. Each correct pick = <strong style="color:var(--gold)">1 bonus point</strong>.</p>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:4px;">Pick 1 player each. Each correct pick = <strong style="color:var(--gold)">1 bonus point</strong>.</p>
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;font-style:italic;">Pick players from teams you think will go deep — if eliminated early their stats won't count.</p>
       <div class="player-picks-grid" id="playerPicksGrid"></div>
       <div class="submit-row">
         <button class="btn-primary" onclick="submitBracket()" id="submitBtn">Submit My Bracket</button>
         <div class="submit-note">Once submitted, your bracket is locked.<br>The $10 buy-in is collected separately via e-transfer.</div>
       </div>
-      <div class="submit-success" id="submitSuccess"><h3>🎉 You're in!</h3><p>Your bracket has been saved. Good luck this playoffs!</p></div>
+      <div class="submit-success" id="submitSuccess"><h3>🎉 You're in!</h3><p>Your bracket has been saved. Check back once the playoffs start to see your score!</p></div>
     </div>
   </section>
 
@@ -311,6 +316,7 @@
   <section id="leaderboard" class="section">
     <p class="section-title">2026 Standings</p>
     <h2 class="section-heading">Leaderboard</h2>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px;">Live standings — updates automatically as series results are entered.</p>
     <div class="pot-bar" id="potBar"></div>
     <div class="card">
       <table class="lb-table">
@@ -329,7 +335,7 @@
   <section id="brackets" class="section">
     <p class="section-title">Everyone's Picks</p>
     <h2 class="section-heading">Browse Brackets</h2>
-    <p style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Click any participant to see their full bracket.</p>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Click any name to see their full bracket. Green = correct, red = incorrect, once results are in.</p>
     <div class="viewer-list" id="viewerList"></div>
   </section>
 
@@ -337,7 +343,7 @@
   <section id="results" class="section">
     <p class="section-title">Official Results</p>
     <h2 class="section-heading">Series Results</h2>
-    <p style="font-size:14px;color:var(--text-dim);margin-bottom:28px;">Updated by the commissioner after each series concludes.</p>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:28px;">Updated by the commissioner as each series concludes.</p>
     <div class="scores-grid" id="scoresGrid"></div>
   </section>
 
@@ -350,7 +356,7 @@
         <label class="field-label">Admin Password</label>
         <input type="password" class="field-input" id="adminPass" placeholder="Enter password" style="margin-bottom:16px;">
         <button class="btn-primary" onclick="checkAdmin()">Login</button>
-        <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Default password: <code style="color:var(--gold);">Hi</code> — change this in the code.</p>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Default: <code style="color:var(--gold);">nhl2026</code> — change this in the code.</p>
       </div>
     </div>
     <div id="adminPanel" style="display:none;">
@@ -360,12 +366,13 @@
 
         <div class="admin-card" style="grid-column:1/-1;">
           <h3>📋 Enter Series Results</h3>
-          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">After each series ends, select the winner and games played. Scores update for everyone automatically.</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Fill in the winner and number of games for each completed series, then hit Save. Results will be live for everyone instantly.</p>
           <div id="adminResults"></div>
           <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
-            <button class="btn-primary" onclick="saveResults()">Save Results & Recalculate Scores</button>
+            <button class="btn-primary" id="saveResultsBtn" onclick="saveResults()">Save Results — Go Live for Everyone</button>
             <button class="btn-secondary" onclick="exportCSV()">Export CSV</button>
           </div>
+          <div id="saveResultsMsg" style="display:none;margin-top:12px;font-size:13px;color:#64e096;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;">✓ Results saved and live!</div>
         </div>
 
         <div class="admin-card" style="grid-column:1/-1;">
@@ -379,7 +386,7 @@
 
         <div class="admin-card" style="grid-column:1/-1;">
           <h3>📧 Bracket Participant Emails</h3>
-          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Copy and paste directly into BCC field of your email.</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Copy and paste into BCC field of your email.</p>
           <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
             <button class="btn-secondary" onclick="copyEmails('all')">Copy All</button>
             <button class="btn-secondary" onclick="copyEmails('paid')">Copy Paid Only</button>
@@ -392,17 +399,15 @@
 
         <div class="admin-card" style="grid-column:1/-1;">
           <h3>📋 Pre-Registration Signup List</h3>
-          <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">People who signed up to be notified when brackets open.</p>
           <button class="btn-secondary" style="margin-bottom:12px;" onclick="adminRefreshSignups()">🔄 Refresh from Google Sheet</button>
-          <div id="adminSignupList"><p style="color:var(--text-dim);font-size:13px;">Click Refresh to load signups from Google Sheet.</p></div>
+          <div id="adminSignupList"><p style="color:var(--text-dim);font-size:13px;">Click Refresh to load signups.</p></div>
         </div>
 
         <div class="admin-card">
           <h3>⚙️ Tournament Controls</h3>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <button class="btn-secondary" onclick="toggleSubmissions()"><span id="submissionToggleText">Close Submissions</span></button>
-            <button class="btn-secondary" onclick="resetScores()">Recalculate All Scores</button>
-            <button class="btn-danger" onclick="clearAllData()">⚠️ Clear Local Data</button>
+            <button class="btn-danger" onclick="clearLocalData()">⚠️ Clear Local Paid Status</button>
           </div>
         </div>
 
@@ -418,6 +423,7 @@
 
 </div>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="bracketModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -428,13 +434,12 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// CONFIG — edit each year
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// CONFIG — update each year
+// ═══════════════════════════════════════════
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyw9WXZFm3opOPA7uoAYWjsP6NLDLCCAe3gcXzD6EKkL1EhN4NVhk5KGaqKeRbqTm2X/exec';
-
-const ADMIN_PASSWORD    = 'nhl2026'; // CHANGE THIS
+const ADMIN_PASSWORD    = 'nhl2026'; // ← CHANGE THIS
 const BUY_IN            = 10;
 const BRACKET_OPEN_DATE = new Date('2026-04-15T00:00:00'); // ← SET YOUR DATE
 
@@ -444,14 +449,12 @@ const WEST_R1 = [
   { home:'Vegas Golden Knights', away:'Minnesota Wild' },
   { home:'LA Kings',             away:'Edmonton Oilers' },
 ];
-
 const EAST_R1 = [
   { home:'Toronto Maple Leafs',  away:'Ottawa Senators' },
   { home:'Tampa Bay Lightning',  away:'Florida Panthers' },
   { home:'Washington Capitals',  away:'Montreal Canadiens' },
   { home:'Carolina Hurricanes',  away:'New Jersey Devils' },
 ];
-
 const PLAYER_PICKS = [
   { category:'Goals Leader',       key:'goals',   pts:1, options:[{name:'William Nylander',team:'TOR'},{name:'Alex Ovechkin',team:'WSH'},{name:'Leon Draisaitl',team:'EDM'}] },
   { category:'Assists Leader',     key:'assists', pts:1, options:[{name:'Connor McDavid',team:'EDM'},{name:'Jack Eichel',team:'VGK'},{name:'Cale Makar',team:'COL'}] },
@@ -459,53 +462,64 @@ const PLAYER_PICKS = [
   { category:'Penalty Min Leader', key:'pim',     pts:1, options:[{name:'Tom Wilson',team:'WSH'},{name:'A.J. Greer',team:'FLA'},{name:'Brady Tkachuk',team:'OTT'}] },
   { category:'Highest Overall',    key:'overall', pts:1, options:[{name:'Mitch Marner',team:'TOR'},{name:'Nathan MacKinnon',team:'COL'},{name:'Nikita Kucherov',team:'TBL'}] },
 ];
+const RP = {r1:1,r2:2,r3:3,cup:5};
+const RL = {r1:'Round 1',r2:'Round 2',r3:'Conf. Final',cup:'Cup Final'};
 
-const ROUND_PTS = { r1:1, r2:2, r3:3, cup:5 };
+// ═══════════════════════════════════════════
+// LOCAL STATE — only paid status + submissions flag
+// ═══════════════════════════════════════════
 
-// ═══════════════════════════════════════
-// LOCAL STATE — only results + paid live here
-// ═══════════════════════════════════════
+function getLS() { try { return JSON.parse(localStorage.getItem('nhl_local_2026')||'{}'); } catch(e) { return {}; } }
+function setLS(s) { localStorage.setItem('nhl_local_2026', JSON.stringify(s)); }
+function lsDef()  { return { paidStatus:{}, submissionsOpen:true }; }
+let ls = { ...lsDef(), ...getLS() };
 
-function getLS() { try { return JSON.parse(localStorage.getItem('nhl_2026') || '{}'); } catch(e) { return {}; } }
-function setLS(s) { localStorage.setItem('nhl_2026', JSON.stringify(s)); }
-function lsDefaults() { return { results:{}, paidStatus:{}, submissionsOpen:true }; }
-
-let ls = { ...lsDefaults(), ...getLS() };
+// In-memory cache
 let participants = [];
+let sheetResults = {}; // loaded from Google Sheet
 let currentPicks = {};
 let currentPlayerPicks = {};
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // GOOGLE SHEETS
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 async function sheetPost(data) {
   try {
     await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
     return true;
-  } catch(e) { console.error(e); return false; }
+  } catch(e) { console.error('POST error',e); return false; }
 }
 
 async function sheetGet(type) {
   try {
-    const r = await fetch(`${SHEET_URL}?type=${type}`);
+    const r = await fetch(`${SHEET_URL}?type=${type}&cb=${Date.now()}`);
     return await r.json();
-  } catch(e) { console.error(e); return []; }
+  } catch(e) { console.error('GET error',e); return []; }
 }
 
-// ═══════════════════════════════════════
+// Load results from Sheet into sheetResults object
+async function loadResults() {
+  const rows = await sheetGet('results');
+  sheetResults = {};
+  if (!Array.isArray(rows)) return;
+  rows.forEach(r => {
+    if (r.id && r.winner) {
+      sheetResults[r.id] = { winner: r.winner, games: parseInt(r.games) || null };
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
 // COUNTDOWN
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 function renderCountdown() {
   const el = document.getElementById('countdownDisplay');
   if (!el) return;
   const diff = BRACKET_OPEN_DATE - new Date();
   if (diff <= 0) { el.innerHTML = `<div class="countdown-gone">🏒 Brackets Are Open — Submit Yours Now!</div>`; return; }
-  const d = Math.floor(diff/864e5);
-  const h = Math.floor(diff/36e5)%24;
-  const m = Math.floor(diff/6e4)%60;
-  const s = Math.floor(diff/1e3)%60;
+  const d=Math.floor(diff/864e5), h=Math.floor(diff/36e5)%24, m=Math.floor(diff/6e4)%60, s=Math.floor(diff/1e3)%60;
   el.innerHTML = `<div class="countdown-bar">
     <div class="countdown-unit"><span class="countdown-number">${d}</span><span class="countdown-label">Days</span></div>
     <div class="countdown-unit"><span class="countdown-number">${String(h).padStart(2,'0')}</span><span class="countdown-label">Hours</span></div>
@@ -516,87 +530,80 @@ function renderCountdown() {
 setInterval(renderCountdown, 1000);
 renderCountdown();
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // SIGNUP
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 async function submitSignup() {
-  const name  = document.getElementById('signupName').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
   if (!name)  { alert('Please enter your name.');  return; }
   if (!email) { alert('Please enter your email.'); return; }
-  const btn = document.getElementById('signupBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Signing up...';
+  const btn=document.getElementById('signupBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Signing up...';
   const ok = await sheetPost({ type:'signup', name, email });
   if (ok) {
     document.getElementById('signupSuccess').classList.add('show');
-    document.getElementById('signupName').value = '';
-    document.getElementById('signupEmail').value = '';
-    btn.style.display = 'none';
+    document.getElementById('signupName').value='';
+    document.getElementById('signupEmail').value='';
+    btn.style.display='none';
   } else {
     alert('Something went wrong. Please try again.');
-    btn.disabled = false;
-    btn.innerHTML = 'Notify Me When Brackets Open';
+    btn.disabled=false; btn.innerHTML='Notify Me When Brackets Open';
   }
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // BRACKET HELPERS
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
-function sid(conf, round, idx) { return `${conf}_${round}_${idx}`; }
+function sid(conf,round,idx) { return `${conf}_${round}_${idx}`; }
 
+// winner from sheet results first, then picks fallback
 function getWinner(id, picks) {
-  if (ls.results[id]?.winner) return ls.results[id].winner;
+  if (sheetResults[id]?.winner) return sheetResults[id].winner;
   if (picks?.[id]?.winner) return picks[id].winner;
   return null;
 }
 
 function getMatchups(conf, round, picks) {
-  if (round === 'r1') return conf === 'west' ? WEST_R1 : EAST_R1;
-  const prev = {r2:'r1',r3:'r2'}[round];
-  const pm = getMatchups(conf, prev, picks);
-  return pm.reduce((acc, _, i, arr) => {
-    if (i % 2 === 0) acc.push({ home: getWinner(sid(conf,prev,i),picks)||`Pick ${i+1} Winner`, away: getWinner(sid(conf,prev,i+1),picks)||`Pick ${i+2} Winner` });
-    return acc;
-  }, []);
+  if (round==='r1') return conf==='west' ? WEST_R1 : EAST_R1;
+  const prev={r2:'r1',r3:'r2'}[round];
+  const pm=getMatchups(conf,prev,picks);
+  const out=[];
+  for(let i=0;i<pm.length;i+=2) {
+    out.push({ home:getWinner(sid(conf,prev,i),picks)||`Pick ${i+1} Winner`, away:getWinner(sid(conf,prev,i+1),picks)||`Pick ${i+2} Winner` });
+  }
+  return out;
 }
 
-const RL = {r1:'Round 1',r2:'Round 2',r3:'Conf. Final',cup:'Cup Final'};
-const RP = {r1:1,r2:2,r3:3,cup:5};
-
-// ═══════════════════════════════════════
-// BRACKET RENDER
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// BRACKET RENDER (submit form)
+// ═══════════════════════════════════════════
 
 function renderBracket() {
   ['west','east'].forEach(conf => {
-    const el = document.getElementById(`${conf}Rounds`);
-    el.innerHTML = '';
+    const el=document.getElementById(`${conf}Rounds`);
+    el.innerHTML='';
     ['r1','r2','r3'].forEach(round => {
-      const col = document.createElement('div');
-      col.className = 'round-col';
-      col.innerHTML = `<div class="round-header">${RL[round]}<span>${RP[round]} pt${RP[round]>1?'s':''}</span></div>`;
-      const slots = document.createElement('div');
-      slots.style.cssText = 'display:flex;flex-direction:column;flex:1;';
-      getMatchups(conf, round, currentPicks).forEach((m, idx) => {
-        const s = document.createElement('div');
-        s.className = 'series-slot'; s.style.flex = '1';
-        s.innerHTML = seriesCard(sid(conf,round,idx), m.home, m.away);
+      const col=document.createElement('div'); col.className='round-col';
+      col.innerHTML=`<div class="round-header">${RL[round]}<span>${RP[round]} pt${RP[round]>1?'s':''}</span></div>`;
+      const slots=document.createElement('div'); slots.style.cssText='display:flex;flex-direction:column;flex:1;';
+      getMatchups(conf,round,currentPicks).forEach((m,idx) => {
+        const s=document.createElement('div'); s.className='series-slot'; s.style.flex='1';
+        s.innerHTML=seriesCard(sid(conf,round,idx),m.home,m.away);
         slots.appendChild(s);
       });
-      col.appendChild(slots);
-      el.appendChild(col);
+      col.appendChild(slots); el.appendChild(col);
     });
   });
   renderCup();
   updateProgress();
 }
 
-function seriesCard(id, home, away) {
-  const p = currentPicks[id] || {};
-  const gOpts = [4,5,6,7].map(g => `<button class="game-btn ${p.games===g?'selected':''}" onclick="pickGames('${id}',${g})">${g}</button>`).join('');
+function seriesCard(id,home,away) {
+  const p=currentPicks[id]||{};
+  const gOpts=[4,5,6,7].map(g=>`<button class="game-btn ${p.games===g?'selected':''}" onclick="pickGames('${id}',${g})">${g}</button>`).join('');
   return `<div class="series-card ${p.winner&&p.games?'complete':''}">
     <div class="team-option ${p.winner===home?'selected':''}" onclick="pickWinner('${id}','${home.replace(/'/g,"\\'")}')"><div class="team-radio"></div><div class="team-name">${home}</div></div>
     <div class="team-option ${p.winner===away?'selected':''}" onclick="pickWinner('${id}','${away.replace(/'/g,"\\'")}')"><div class="team-radio"></div><div class="team-name">${away}</div></div>
@@ -605,246 +612,246 @@ function seriesCard(id, home, away) {
 }
 
 function renderCup() {
-  const wf = getWinner(sid('west','r3',0), currentPicks) || 'West Finalist TBD';
-  const ef = getWinner(sid('east','r3',0), currentPicks) || 'East Finalist TBD';
-  document.getElementById('cupWest').textContent = wf;
-  document.getElementById('cupEast').textContent = ef;
-  const pa = document.getElementById('cupPickArea');
-  const ready = wf !== 'West Finalist TBD' && ef !== 'East Finalist TBD';
-  pa.style.display = ready ? 'block' : 'none';
-  if (!ready) return;
-  const cp = currentPicks['cup'] || {};
-  document.getElementById('cupOptions').innerHTML = [wf,ef].map(t =>
+  const wf=getWinner(sid('west','r3',0),currentPicks)||'West Finalist TBD';
+  const ef=getWinner(sid('east','r3',0),currentPicks)||'East Finalist TBD';
+  document.getElementById('cupWest').textContent=wf;
+  document.getElementById('cupEast').textContent=ef;
+  const pa=document.getElementById('cupPickArea');
+  const ready=wf!=='West Finalist TBD'&&ef!=='East Finalist TBD';
+  pa.style.display=ready?'block':'none';
+  if(!ready) return;
+  const cp=currentPicks['cup']||{};
+  document.getElementById('cupOptions').innerHTML=[wf,ef].map(t=>
     `<div class="team-option ${cp.winner===t?'selected':''}" onclick="pickWinner('cup','${t.replace(/'/g,"\\'")}')"><div class="team-radio"></div><div class="team-name">${t}</div></div>`
   ).join('');
-  document.getElementById('cupGames').innerHTML = [4,5,6,7].map(g =>
+  document.getElementById('cupGames').innerHTML=[4,5,6,7].map(g=>
     `<button class="game-btn ${cp.games===g?'selected':''}" onclick="pickGames('cup',${g})">${g}</button>`
   ).join('');
 }
 
-function pickWinner(id, team) { if(!currentPicks[id]) currentPicks[id]={}; currentPicks[id].winner=team; renderBracket(); }
-function pickGames(id, g)     { if(!currentPicks[id]) currentPicks[id]={}; currentPicks[id].games=g;   renderBracket(); }
+function pickWinner(id,team) { if(!currentPicks[id]) currentPicks[id]={}; currentPicks[id].winner=team; renderBracket(); }
+function pickGames(id,g)     { if(!currentPicks[id]) currentPicks[id]={}; currentPicks[id].games=g;    renderBracket(); }
 
 function updateProgress() {
-  const all = [];
-  ['west','east'].forEach(c => ['r1','r2','r3'].forEach(r => getMatchups(c,r,currentPicks).forEach((_,i) => all.push(sid(c,r,i)))));
+  const all=[];
+  ['west','east'].forEach(c=>['r1','r2','r3'].forEach(r=>getMatchups(c,r,currentPicks).forEach((_,i)=>all.push(sid(c,r,i)))));
   all.push('cup');
-  const n = all.filter(id => currentPicks[id]?.winner && currentPicks[id]?.games).length;
-  document.getElementById('progressText').textContent = `${n} of 15 series picked`;
-  document.getElementById('progressBar').style.width = `${(n/15)*100}%`;
+  const n=all.filter(id=>currentPicks[id]?.winner&&currentPicks[id]?.games).length;
+  document.getElementById('progressText').textContent=`${n} of 15 series picked`;
+  document.getElementById('progressBar').style.width=`${(n/15)*100}%`;
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // PLAYER PICKS
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 function renderPlayerPicks() {
-  document.getElementById('playerPicksGrid').innerHTML = PLAYER_PICKS.map(cat => `
+  document.getElementById('playerPicksGrid').innerHTML=PLAYER_PICKS.map(cat=>`
     <div class="player-pick-card">
       <div class="pick-category">${cat.category} <span style="color:var(--text-dim);font-size:9px;">(+${cat.pts}pt)</span></div>
-      ${cat.options.map(p => `<div class="pick-option ${currentPlayerPicks[cat.key]===p.name?'selected':''}" onclick="pickPlayer('${cat.key}','${p.name.replace(/'/g,"\\'")}')">
+      ${cat.options.map(p=>`<div class="pick-option ${currentPlayerPicks[cat.key]===p.name?'selected':''}" onclick="pickPlayer('${cat.key}','${p.name.replace(/'/g,"\\'")}')">
         <div class="pick-radio"></div><span class="pick-player-name">${p.name}</span><span class="pick-player-team">${p.team}</span>
       </div>`).join('')}
     </div>`).join('');
 }
 
-function pickPlayer(key, name) { currentPlayerPicks[key] = name; renderPlayerPicks(); }
+function pickPlayer(key,name) { currentPlayerPicks[key]=name; renderPlayerPicks(); }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // SUBMIT BRACKET
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 async function submitBracket() {
-  const name = document.getElementById('participantName').value.trim();
+  const name=document.getElementById('participantName').value.trim();
   if (!name) { alert('Please enter your name.'); return; }
   if (!ls.submissionsOpen) { alert('Submissions are currently closed.'); return; }
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Submitting...';
-  const ok = await sheetPost({ type:'bracket', name, email:document.getElementById('participantEmail').value.trim(), picks:currentPicks, playerPicks:currentPlayerPicks });
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Submitting...';
+  const ok=await sheetPost({ type:'bracket', name, email:document.getElementById('participantEmail').value.trim(), picks:currentPicks, playerPicks:currentPlayerPicks });
   if (ok) {
     document.getElementById('submitSuccess').classList.add('show');
-    btn.style.display = 'none';
-    currentPicks = {}; currentPlayerPicks = {};
+    btn.style.display='none';
+    currentPicks={}; currentPlayerPicks={};
     renderBracket(); renderPlayerPicks();
   } else {
     alert('Something went wrong. Please try again.');
-    btn.disabled = false; btn.innerHTML = 'Submit My Bracket';
+    btn.disabled=false; btn.innerHTML='Submit My Bracket';
   }
 }
 
-// ═══════════════════════════════════════
-// LOAD FROM SHEET
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// LOAD BRACKETS FROM SHEET
+// ═══════════════════════════════════════════
 
 async function loadBrackets() {
-  const raw = await sheetGet('brackets');
-  if (!raw || !Array.isArray(raw)) { participants = []; return; }
-  participants = raw.map(r => {
-    let picks = {}, playerPicks = {};
-    try { picks = typeof r.picks === 'string' ? JSON.parse(r.picks) : (r.picks||{}); } catch(e){}
-    try { playerPicks = typeof r.playerPicks === 'string' ? JSON.parse(r.playerPicks) : (r.playerPicks||{}); } catch(e){}
+  const raw=await sheetGet('brackets');
+  if (!Array.isArray(raw)) { participants=[]; return; }
+  participants=raw.map(r => {
+    let picks={}, playerPicks={};
+    try { picks=typeof r.picks==='string'?JSON.parse(r.picks):(r.picks||{}); } catch(e){}
+    try { playerPicks=typeof r.playerPicks==='string'?JSON.parse(r.playerPicks):(r.playerPicks||{}); } catch(e){}
     return { name:r.name, email:r.email||'', submitted:r.submitted, picks, playerPicks, paid:ls.paidStatus[r.name]||false, scores:{r1:0,r2:0,r3:0,cup:0,series:0,players:0,total:0} };
   });
   calcAllScores();
 }
 
-// ═══════════════════════════════════════
-// SCORING
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// SCORING — uses sheetResults (live from Sheet)
+// ═══════════════════════════════════════════
 
-function calcAllScores() { participants.forEach(p => { p.scores = calcScores(p); }); }
+function calcAllScores() { participants.forEach(p=>{ p.scores=calcScores(p); }); }
 
 function calcScores(p) {
-  const sc = {r1:0,r2:0,r3:0,cup:0,series:0,players:0,total:0};
-  ['west','east'].forEach(c => {
-    ['r1','r2','r3'].forEach(r => {
-      getMatchups(c,r,ls.results).forEach((_,i) => {
-        const id = sid(c,r,i), res = ls.results[id], pk = p.picks?.[id];
+  const sc={r1:0,r2:0,r3:0,cup:0,series:0,players:0,total:0};
+  ['west','east'].forEach(c=>{
+    ['r1','r2','r3'].forEach(r=>{
+      getMatchups(c,r,sheetResults).forEach((_,i)=>{
+        const id=sid(c,r,i), res=sheetResults[id], pk=p.picks?.[id];
         if (res?.winner && pk) {
-          if (pk.winner === res.winner) sc[r] += RP[r];
-          if (pk.games  === res.games)  sc.series++;
+          if (pk.winner===res.winner) sc[r]+=RP[r];
+          if (pk.games===res.games)   sc.series++;
         }
       });
     });
   });
-  const cr = ls.results['cup'], cp = p.picks?.['cup'];
-  if (cr?.winner && cp) { if (cp.winner===cr.winner) sc.cup+=5; if (cp.games===cr.games) sc.series++; }
-  const pr = ls.results['_players'] || {};
-  PLAYER_PICKS.forEach(cat => { if (pr[cat.key] && p.playerPicks?.[cat.key] === pr[cat.key]) sc.players++; });
-  sc.total = sc.r1+sc.r2+sc.r3+sc.cup+sc.series+sc.players;
+  const cr=sheetResults['cup'], cp=p.picks?.['cup'];
+  if (cr?.winner&&cp) { if(cp.winner===cr.winner) sc.cup+=5; if(cp.games===cr.games) sc.series++; }
+  const pr=sheetResults['_players']||{};
+  PLAYER_PICKS.forEach(cat=>{ if(pr[cat.key]&&p.playerPicks?.[cat.key]===pr[cat.key]) sc.players++; });
+  sc.total=sc.r1+sc.r2+sc.r3+sc.cup+sc.series+sc.players;
   return sc;
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // LEADERBOARD
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 async function renderLeaderboard() {
-  document.getElementById('lbBody').innerHTML = '<tr><td colspan="10"><div class="loading-msg"><span class="spinner"></span> Loading leaderboard from Google Sheet...</div></td></tr>';
-  await loadBrackets();
-  const sorted = [...participants].sort((a,b) => (b.scores.total||0)-(a.scores.total||0));
-  const paid = participants.filter(p=>p.paid).length;
-  const pot  = paid * BUY_IN;
-  document.getElementById('potBar').innerHTML = `
+  document.getElementById('lbBody').innerHTML=`<tr><td colspan="10"><div class="loading-msg"><span class="spinner"></span> Loading live data from Google Sheet...</div></td></tr>`;
+  await Promise.all([loadResults(), loadBrackets()]);
+  const sorted=[...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
+  const paid=participants.filter(p=>p.paid).length, pot=paid*BUY_IN;
+  document.getElementById('potBar').innerHTML=`
     <div class="pot-card gold"><div class="pot-card-label">Prize Pot</div><div class="pot-card-value">$${pot}</div></div>
-    <div class="pot-card gold"><div class="pot-card-label">1st (65%)</div><div class="pot-card-value">$${(pot*.65).toFixed(2)}</div></div>
-    <div class="pot-card silver"><div class="pot-card-label">2nd (25%)</div><div class="pot-card-value">$${(pot*.25).toFixed(2)}</div></div>
-    <div class="pot-card bronze"><div class="pot-card-label">3rd (10%)</div><div class="pot-card-value">$${(pot*.1).toFixed(2)}</div></div>`;
-  let rank = 1;
-  document.getElementById('lbBody').innerHTML = sorted.length === 0
-    ? `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-dim);">No brackets submitted yet.</td></tr>`
-    : sorted.map((p,i) => {
-        if (i>0 && p.scores.total !== sorted[i-1].scores.total) rank = i+1;
-        const s = p.scores; const rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
-        return `<tr onclick="openModal('${p.name.replace(/'/g,"\\'")}')">
-          <td><div class="lb-rank ${rc}">${rank}</div></td>
-          <td><div class="lb-name">${p.name}</div></td>
-          <td class="right" style="color:var(--text-dim);">${s.r1}</td><td class="right" style="color:var(--text-dim);">${s.r2}</td>
-          <td class="right" style="color:var(--text-dim);">${s.r3}</td><td class="right" style="color:var(--text-dim);">${s.cup}</td>
-          <td class="right" style="color:var(--text-dim);">${s.series}</td><td class="right" style="color:var(--text-dim);">${s.players}</td>
-          <td class="right"><div class="lb-points">${s.total}</div></td>
-          <td class="right">${p.paid?'<span class="paid-badge">Paid</span>':'<span class="unpaid-badge">Unpaid</span>'}</td>
-        </tr>`;
-      }).join('');
+    <div class="pot-card gold"><div class="pot-card-label">1st Place (65%)</div><div class="pot-card-value">$${(pot*.65).toFixed(2)}</div></div>
+    <div class="pot-card silver"><div class="pot-card-label">2nd Place (25%)</div><div class="pot-card-value">$${(pot*.25).toFixed(2)}</div></div>
+    <div class="pot-card bronze"><div class="pot-card-label">3rd Place (10%)</div><div class="pot-card-value">$${(pot*.1).toFixed(2)}</div></div>`;
+  let rank=1;
+  document.getElementById('lbBody').innerHTML=sorted.length===0
+    ?`<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-dim);">No brackets submitted yet.</td></tr>`
+    :sorted.map((p,i)=>{
+      if(i>0&&p.scores.total!==sorted[i-1].scores.total) rank=i+1;
+      const s=p.scores, rc=rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+      return `<tr onclick="openModal('${p.name.replace(/'/g,"\\'")}')">
+        <td><div class="lb-rank ${rc}">${rank}</div></td>
+        <td><div class="lb-name">${p.name}</div></td>
+        <td class="right" style="color:var(--text-dim);">${s.r1}</td><td class="right" style="color:var(--text-dim);">${s.r2}</td>
+        <td class="right" style="color:var(--text-dim);">${s.r3}</td><td class="right" style="color:var(--text-dim);">${s.cup}</td>
+        <td class="right" style="color:var(--text-dim);">${s.series}</td><td class="right" style="color:var(--text-dim);">${s.players}</td>
+        <td class="right"><div class="lb-points">${s.total}</div></td>
+        <td class="right">${p.paid?'<span class="paid-badge">Paid</span>':'<span class="unpaid-badge">Unpaid</span>'}</td>
+      </tr>`;
+    }).join('');
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // VIEW BRACKETS
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 async function renderViewerList() {
-  const el = document.getElementById('viewerList');
-  el.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Loading brackets from Google Sheet...</div>';
-  await loadBrackets();
-  const sorted = [...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
-  el.innerHTML = sorted.length === 0
-    ? '<p style="color:var(--text-dim);">No brackets submitted yet.</p>'
-    : sorted.map(p => `<div class="viewer-chip" onclick="openModal('${p.name.replace(/'/g,"\\'")}')">
+  const el=document.getElementById('viewerList');
+  el.innerHTML='<div class="loading-msg"><span class="spinner"></span> Loading brackets...</div>';
+  await Promise.all([loadResults(), loadBrackets()]);
+  const sorted=[...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
+  el.innerHTML=sorted.length===0
+    ?'<p style="color:var(--text-dim);">No brackets submitted yet.</p>'
+    :sorted.map(p=>`<div class="viewer-chip" onclick="openModal('${p.name.replace(/'/g,"\\'")}')">
         <span class="viewer-chip-name">${p.name}</span>
         <span class="viewer-chip-pts">${p.scores.total} pts</span>
       </div>`).join('');
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // MODAL
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 function openModal(name) {
-  const p = participants.find(x => x.name === name);
-  if (!p) return;
-  document.getElementById('modalName').textContent = p.name;
-  document.getElementById('modalSubtitle').textContent = `${p.scores.total} total points · Submitted ${p.submitted}`;
-  let html = '';
-  ['west','east'].forEach(conf => {
-    html += `<div class="modal-section-title">${conf==='west'?'Western':'Eastern'} Conference</div><div class="modal-picks-grid">`;
-    ['r1','r2','r3'].forEach(round => {
-      getMatchups(conf, round, p.picks).forEach((m, idx) => {
-        const id = sid(conf,round,idx), pk = p.picks?.[id], res = ls.results?.[id];
-        const st = res?.winner ? (pk?.winner===res.winner?'correct':'incorrect') : 'pending';
-        html += `<div class="modal-pick-item ${st}"><div class="modal-pick-round">${RL[round]} · ${RP[round]}pt</div><div class="modal-pick-team">${pk?.winner||'—'}</div><div class="modal-pick-games">${pk?.games?`in ${pk.games}`:''}</div></div>`;
+  const p=participants.find(x=>x.name===name); if(!p) return;
+  document.getElementById('modalName').textContent=p.name;
+  document.getElementById('modalSubtitle').textContent=`${p.scores.total} total points · Submitted ${p.submitted}`;
+  let html='';
+  ['west','east'].forEach(conf=>{
+    html+=`<div class="modal-section-title">${conf==='west'?'Western':'Eastern'} Conference</div><div class="modal-picks-grid">`;
+    ['r1','r2','r3'].forEach(round=>{
+      getMatchups(conf,round,p.picks).forEach((m,idx)=>{
+        const id=sid(conf,round,idx), pk=p.picks?.[id], res=sheetResults[id];
+        const st=res?.winner?(pk?.winner===res.winner?'correct':'incorrect'):'pending';
+        html+=`<div class="modal-pick-item ${st}"><div class="modal-pick-round">${RL[round]} · ${RP[round]}pt</div><div class="modal-pick-team">${pk?.winner||'—'}</div><div class="modal-pick-games">${pk?.games?`in ${pk.games}`:''}</div></div>`;
       });
     });
-    html += '</div>';
+    html+='</div>';
   });
-  const cp = p.picks?.['cup'], cr = ls.results?.['cup'];
-  const cst = cr?.winner ? (cp?.winner===cr.winner?'correct':'incorrect') : 'pending';
-  html += `<div class="modal-section-title">Stanley Cup Final</div><div class="modal-picks-grid"><div class="modal-pick-item ${cst}"><div class="modal-pick-round">Cup Champion · 5pts</div><div class="modal-pick-team">${cp?.winner||'—'}</div><div class="modal-pick-games">${cp?.games?`in ${cp.games}`:''}</div></div></div>`;
-  const pr = ls.results['_players'] || {};
-  html += `<div class="modal-section-title">Bonus Player Picks</div><div class="modal-picks-grid">`;
-  PLAYER_PICKS.forEach(cat => {
-    const pp = p.playerPicks?.[cat.key];
-    const st = pr[cat.key] ? (pp===pr[cat.key]?'correct':'incorrect') : 'pending';
-    html += `<div class="modal-pick-item ${st}"><div class="modal-pick-round">${cat.category}</div><div class="modal-pick-team" style="font-size:14px;">${pp||'—'}</div></div>`;
+  const cp=p.picks?.['cup'], cr=sheetResults['cup'];
+  const cst=cr?.winner?(cp?.winner===cr.winner?'correct':'incorrect'):'pending';
+  html+=`<div class="modal-section-title">Stanley Cup Final</div><div class="modal-picks-grid"><div class="modal-pick-item ${cst}"><div class="modal-pick-round">Cup Champion · 5pts</div><div class="modal-pick-team">${cp?.winner||'—'}</div><div class="modal-pick-games">${cp?.games?`in ${cp.games}`:''}</div></div></div>`;
+  const pr=sheetResults['_players']||{};
+  html+=`<div class="modal-section-title">Bonus Player Picks</div><div class="modal-picks-grid">`;
+  PLAYER_PICKS.forEach(cat=>{
+    const pp=p.playerPicks?.[cat.key];
+    const st=pr[cat.key]?(pp===pr[cat.key]?'correct':'incorrect'):'pending';
+    html+=`<div class="modal-pick-item ${st}"><div class="modal-pick-round">${cat.category}</div><div class="modal-pick-team" style="font-size:14px;">${pp||'—'}</div></div>`;
   });
-  html += '</div>';
-  document.getElementById('modalContent').innerHTML = html;
+  html+='</div>';
+  document.getElementById('modalContent').innerHTML=html;
   document.getElementById('bracketModal').classList.add('open');
 }
 
 function closeModal() { document.getElementById('bracketModal').classList.remove('open'); }
-document.getElementById('bracketModal').addEventListener('click', e => { if (e.target===document.getElementById('bracketModal')) closeModal(); });
+document.getElementById('bracketModal').addEventListener('click',e=>{ if(e.target===document.getElementById('bracketModal')) closeModal(); });
 
-// ═══════════════════════════════════════
-// RESULTS PAGE
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// RESULTS PAGE — reads from Sheet
+// ═══════════════════════════════════════════
 
-function renderResults() {
-  let html = '';
-  ['west','east'].forEach(c => {
-    ['r1','r2','r3'].forEach(r => {
-      getMatchups(c,r,ls.results).forEach((m,i) => {
-        const res = ls.results[sid(c,r,i)];
-        html += `<div class="score-card"><div class="score-round">${c.toUpperCase()} · ${RL[r]}</div><div class="score-series">${m.home} vs ${m.away}</div>${res?.winner?`<div class="score-result">${res.winner} in ${res.games}</div>`:`<div class="score-result pending">Pending</div>`}</div>`;
+async function renderResults() {
+  document.getElementById('scoresGrid').innerHTML='<div class="loading-msg"><span class="spinner"></span> Loading results...</div>';
+  await loadResults();
+  let html='';
+  ['west','east'].forEach(c=>{
+    ['r1','r2','r3'].forEach(r=>{
+      getMatchups(c,r,sheetResults).forEach((m,i)=>{
+        const res=sheetResults[sid(c,r,i)];
+        html+=`<div class="score-card"><div class="score-round">${c.toUpperCase()} · ${RL[r]}</div><div class="score-series">${m.home} vs ${m.away}</div>${res?.winner?`<div class="score-result">${res.winner} in ${res.games}</div>`:`<div class="score-result pending">Pending</div>`}</div>`;
       });
     });
   });
-  const wf = getWinner(sid('west','r3',0),ls.results)||'West Finalist';
-  const ef = getWinner(sid('east','r3',0),ls.results)||'East Finalist';
-  const cup = ls.results['cup'];
-  html += `<div class="score-card" style="border-color:rgba(255,184,28,0.3);"><div class="score-round">🏆 Stanley Cup Final</div><div class="score-series">${wf} vs ${ef}</div>${cup?.winner?`<div class="score-result">${cup.winner} in ${cup.games}</div>`:`<div class="score-result pending">Pending</div>`}</div>`;
-  document.getElementById('scoresGrid').innerHTML = html;
+  const wf=sheetResults['west_r3_0']?.winner||'West Finalist';
+  const ef=sheetResults['east_r3_0']?.winner||'East Finalist';
+  const cup=sheetResults['cup'];
+  html+=`<div class="score-card" style="border-color:rgba(255,184,28,0.3);"><div class="score-round">🏆 Stanley Cup Final</div><div class="score-series">${wf} vs ${ef}</div>${cup?.winner?`<div class="score-result">${cup.winner} in ${cup.games}</div>`:`<div class="score-result pending">Pending</div>`}</div>`;
+  document.getElementById('scoresGrid').innerHTML=html;
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // ADMIN
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 function checkAdmin() {
-  if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
-    document.getElementById('adminGate').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
+  if (document.getElementById('adminPass').value===ADMIN_PASSWORD) {
+    document.getElementById('adminGate').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
     renderAdmin();
   } else { alert('Incorrect password.'); }
 }
 
 async function renderAdmin() {
-  renderAdminResults();
+  await loadResults();
+  renderAdminResultsForm();
   await loadBrackets();
   renderAdminParticipants();
   renderEmailList();
   renderAdminPot();
-  document.getElementById('submissionToggleText').textContent = ls.submissionsOpen ? 'Close Submissions' : 'Open Submissions';
+  document.getElementById('submissionToggleText').textContent=ls.submissionsOpen?'Close Submissions':'Open Submissions';
 }
 
 async function adminRefreshBrackets() {
@@ -855,12 +862,12 @@ async function adminRefreshBrackets() {
 }
 
 async function adminRefreshSignups() {
-  const el = document.getElementById('adminSignupList');
-  el.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Loading from Google Sheet...</div>';
-  const signups = await sheetGet('signups');
-  if (!signups || signups.length === 0) { el.innerHTML = '<p style="color:var(--text-dim);font-size:13px;">No signups yet.</p>'; return; }
-  const emails = signups.map(s=>s.email).filter(Boolean).join(', ');
-  el.innerHTML = `
+  const el=document.getElementById('adminSignupList');
+  el.innerHTML='<div class="loading-msg"><span class="spinner"></span> Loading from Google Sheet...</div>';
+  const signups=await sheetGet('signups');
+  if (!signups||signups.length===0) { el.innerHTML='<p style="color:var(--text-dim);font-size:13px;">No signups yet.</p>'; return; }
+  const emails=signups.map(s=>s.email).filter(Boolean).join(', ');
+  el.innerHTML=`
     <div style="font-size:13px;color:var(--text-dim);margin-bottom:12px;"><span style="color:var(--gold);font-weight:700;">${signups.length}</span> people signed up</div>
     <div style="background:rgba(232,244,248,0.04);border:1px solid var(--border);border-radius:3px;padding:16px;font-family:monospace;font-size:13px;color:var(--ice-dim);line-height:2;word-break:break-all;">${emails}</div>
     <button class="btn-secondary" style="margin-top:12px;" onclick="copyText('${emails.replace(/'/g,"\\'")}')">Copy All Signup Emails</button>
@@ -874,73 +881,100 @@ async function adminRefreshSignups() {
     </table>`;
 }
 
-function renderAdminResults() {
-  let html = '';
-  ['west','east'].forEach(c => {
-    ['r1','r2','r3'].forEach(r => {
-      getMatchups(c,r,ls.results).forEach((m,i) => {
-        const id = sid(c,r,i), res = ls.results[id]||{};
-        html += `<div class="result-row">
+function renderAdminResultsForm() {
+  let html='';
+  ['west','east'].forEach(c=>{
+    ['r1','r2','r3'].forEach(r=>{
+      getMatchups(c,r,sheetResults).forEach((m,i)=>{
+        const id=sid(c,r,i), res=sheetResults[id]||{};
+        html+=`<div class="result-row">
           <span class="result-label">${c.toUpperCase()} ${RL[r]}: ${m.home} vs ${m.away}</span>
-          <select class="result-winner" id="winner_${id}">
+          <select class="result-winner" id="w_${id}">
             <option value="">— Winner —</option>
             <option value="${m.home}" ${res.winner===m.home?'selected':''}>${m.home}</option>
             <option value="${m.away}" ${res.winner===m.away?'selected':''}>${m.away}</option>
           </select>
-          <input type="number" class="result-games" id="games_${id}" min="4" max="7" value="${res.games||''}" placeholder="G">
+          <input type="number" class="result-games" id="g_${id}" min="4" max="7" value="${res.games||''}" placeholder="G">
         </div>`;
       });
     });
   });
-  const wf = getWinner(sid('west','r3',0),ls.results)||'';
-  const ef = getWinner(sid('east','r3',0),ls.results)||'';
-  const cup = ls.results['cup']||{};
-  html += `<div class="result-row">
+  const wf=sheetResults['west_r3_0']?.winner||'';
+  const ef=sheetResults['east_r3_0']?.winner||'';
+  const cup=sheetResults['cup']||{};
+  html+=`<div class="result-row">
     <span class="result-label">🏆 Stanley Cup Final</span>
-    <select class="result-winner" id="winner_cup">
+    <select class="result-winner" id="w_cup">
       <option value="">— Winner —</option>
       ${wf?`<option value="${wf}" ${cup.winner===wf?'selected':''}>${wf}</option>`:''}
       ${ef?`<option value="${ef}" ${cup.winner===ef?'selected':''}>${ef}</option>`:''}
     </select>
-    <input type="number" class="result-games" id="games_cup" min="4" max="7" value="${cup.games||''}" placeholder="G">
+    <input type="number" class="result-games" id="g_cup" min="4" max="7" value="${cup.games||''}" placeholder="G">
   </div>`;
-  const pr = ls.results['_players']||{};
-  html += `<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Player Stat Leaders</div>`;
-  PLAYER_PICKS.forEach(cat => {
-    html += `<div class="result-row"><span class="result-label">${cat.category}</span><select class="result-winner" id="player_${cat.key}"><option value="">— Select —</option>${cat.options.map(o=>`<option value="${o.name}" ${pr[cat.key]===o.name?'selected':''}>${o.name}</option>`).join('')}</select></div>`;
+  const pr=sheetResults['_players']||{};
+  html+=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Player Stat Leaders</div>`;
+  PLAYER_PICKS.forEach(cat=>{
+    html+=`<div class="result-row"><span class="result-label">${cat.category}</span>
+      <select class="result-winner" id="p_${cat.key}">
+        <option value="">— Select —</option>
+        ${cat.options.map(o=>`<option value="${o.name}" ${pr[cat.key]===o.name?'selected':''}>${o.name}</option>`).join('')}
+      </select></div>`;
   });
-  html += '</div>';
-  document.getElementById('adminResults').innerHTML = html;
+  html+='</div>';
+  document.getElementById('adminResults').innerHTML=html;
 }
 
-function saveResults() {
-  ['west','east'].forEach(c => {
-    ['r1','r2','r3'].forEach(r => {
-      getMatchups(c,r,ls.results).forEach((_,i) => {
-        const id = sid(c,r,i);
-        const w = document.getElementById(`winner_${id}`)?.value;
-        const g = parseInt(document.getElementById(`games_${id}`)?.value);
-        if (w) ls.results[id] = { winner:w, games:isNaN(g)?null:g };
+async function saveResults() {
+  const btn=document.getElementById('saveResultsBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Saving...';
+
+  // Build results array
+  const results=[];
+
+  ['west','east'].forEach(c=>{
+    ['r1','r2','r3'].forEach(r=>{
+      getMatchups(c,r,sheetResults).forEach((_,i)=>{
+        const id=sid(c,r,i);
+        const w=document.getElementById(`w_${id}`)?.value;
+        const g=parseInt(document.getElementById(`g_${id}`)?.value);
+        if (w) results.push({ id, winner:w, games:isNaN(g)?null:g });
       });
     });
   });
-  const cw = document.getElementById('winner_cup')?.value;
-  const cg = parseInt(document.getElementById('games_cup')?.value);
-  if (cw) ls.results['cup'] = { winner:cw, games:isNaN(cg)?null:cg };
-  const pr = {};
-  PLAYER_PICKS.forEach(cat => { const v = document.getElementById(`player_${cat.key}`)?.value; if(v) pr[cat.key]=v; });
-  ls.results['_players'] = pr;
-  setLS(ls);
-  calcAllScores();
-  renderAdmin();
-  alert('Results saved! Scores recalculated for all participants.');
+
+  const cw=document.getElementById('w_cup')?.value;
+  const cg=parseInt(document.getElementById('g_cup')?.value);
+  if (cw) results.push({ id:'cup', winner:cw, games:isNaN(cg)?null:cg });
+
+  // Player results
+  PLAYER_PICKS.forEach(cat=>{
+    const v=document.getElementById(`p_${cat.key}`)?.value;
+    if (v) results.push({ id:`_players_${cat.key}`, winner:v, games:null });
+  });
+
+  const ok=await sheetPost({ type:'results', results });
+
+  btn.disabled=false; btn.innerHTML='Save Results — Go Live for Everyone';
+
+  if (ok) {
+    const msg=document.getElementById('saveResultsMsg');
+    msg.style.display='block'; setTimeout(()=>msg.style.display='none',3000);
+    // Reload results and refresh leaderboard
+    await loadResults();
+    calcAllScores();
+    renderAdminParticipants();
+    renderAdminPot();
+  } else {
+    alert('Error saving results. Please try again.');
+  }
 }
 
 function renderAdminParticipants() {
-  const sorted = [...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
-  document.getElementById('adminParticipantsBody').innerHTML = sorted.length === 0
-    ? `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-dim);">No participants yet. Click "Refresh from Google Sheet".</td></tr>`
-    : sorted.map(p => `<tr>
+  const sorted=[...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
+  document.getElementById('adminParticipantsBody').innerHTML=sorted.length===0
+    ?`<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-dim);">No participants yet. Click Refresh.</td></tr>`
+    :sorted.map(p=>`<tr>
         <td>${p.name}</td>
         <td style="color:var(--text-dim);font-size:12px;">${p.submitted}</td>
         <td style="color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;">${p.scores.total}</td>
@@ -950,34 +984,32 @@ function renderAdminParticipants() {
 }
 
 function renderEmailList() {
-  const w = participants.filter(p=>p.email);
-  const n = participants.filter(p=>!p.email);
-  const box = document.getElementById('emailListBox');
-  if (box) box.textContent = w.length===0 ? 'No bracket emails yet. Refresh first.' : w.map(p=>p.email).join(', ');
-  const ned = document.getElementById('emailListNoEmail');
-  if (ned) ned.innerHTML = n.length>0 ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">No email on file (${n.length})</div><div style="font-size:13px;color:var(--text-dim);">${n.map(p=>p.name).join(', ')}</div>` : '';
+  const w=participants.filter(p=>p.email), n=participants.filter(p=>!p.email);
+  const box=document.getElementById('emailListBox');
+  if(box) box.textContent=w.length===0?'No emails yet. Click Refresh first.':w.map(p=>p.email).join(', ');
+  const ned=document.getElementById('emailListNoEmail');
+  if(ned) ned.innerHTML=n.length>0?`<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">No email on file (${n.length})</div><div style="font-size:13px;color:var(--text-dim);">${n.map(p=>p.name).join(', ')}</div>`:'';
 }
 
 function copyEmails(filter) {
-  let g = participants;
-  if (filter==='paid')   g = participants.filter(p=>p.paid);
-  if (filter==='unpaid') g = participants.filter(p=>!p.paid);
-  const text = g.filter(p=>p.email).map(p=>p.email).join(', ');
-  if (!text) { alert('No emails for that filter.'); return; }
+  let g=participants;
+  if(filter==='paid')   g=participants.filter(p=>p.paid);
+  if(filter==='unpaid') g=participants.filter(p=>!p.paid);
+  const text=g.filter(p=>p.email).map(p=>p.email).join(', ');
+  if(!text) { alert('No emails for that filter.'); return; }
   copyText(text);
 }
 
 function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    const el = document.getElementById('copyConfirm');
-    if (el) { el.style.display='block'; setTimeout(()=>el.style.display='none',2500); }
+  navigator.clipboard.writeText(text).then(()=>{
+    const el=document.getElementById('copyConfirm');
+    if(el) { el.style.display='block'; setTimeout(()=>el.style.display='none',2500); }
   });
 }
 
 function renderAdminPot() {
-  const paid = participants.filter(p=>p.paid).length;
-  const pot  = paid * BUY_IN;
-  document.getElementById('adminPotInfo').innerHTML = `
+  const paid=participants.filter(p=>p.paid).length, pot=paid*BUY_IN;
+  document.getElementById('adminPotInfo').innerHTML=`
     <div style="font-family:'Barlow Condensed',sans-serif;">
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--text-dim);">Participants</span><span>${participants.length}</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--text-dim);">Paid</span><span style="color:#64e096;">${paid}</span></div>
@@ -989,65 +1021,58 @@ function renderAdminPot() {
 }
 
 function togglePaid(name) {
-  ls.paidStatus[name] = !ls.paidStatus[name];
-  setLS(ls);
-  const p = participants.find(x=>x.name===name);
-  if (p) p.paid = ls.paidStatus[name];
-  renderAdminParticipants();
-  renderAdminPot();
+  ls.paidStatus[name]=!ls.paidStatus[name]; setLS(ls);
+  const p=participants.find(x=>x.name===name); if(p) p.paid=ls.paidStatus[name];
+  renderAdminParticipants(); renderAdminPot();
 }
 
 function toggleSubmissions() {
-  ls.submissionsOpen = !ls.submissionsOpen;
-  setLS(ls);
-  document.getElementById('submissionToggleText').textContent = ls.submissionsOpen ? 'Close Submissions' : 'Open Submissions';
-  alert(`Submissions are now ${ls.submissionsOpen ? 'OPEN' : 'CLOSED'}.`);
+  ls.submissionsOpen=!ls.submissionsOpen; setLS(ls);
+  document.getElementById('submissionToggleText').textContent=ls.submissionsOpen?'Close Submissions':'Open Submissions';
+  alert(`Submissions are now ${ls.submissionsOpen?'OPEN':'CLOSED'}.`);
 }
 
-function resetScores() { calcAllScores(); renderLeaderboard(); }
-
-function clearAllData() {
-  if (confirm('Clear all local results and paid status? Bracket data in Google Sheet is NOT deleted.')) {
-    ls = { ...lsDefaults() }; setLS(ls); participants = [];
-    renderAdmin(); alert('Local data cleared.');
+function clearLocalData() {
+  if(confirm('Clear paid status? Bracket and signup data in Google Sheet is NOT affected.')) {
+    ls={...lsDef()}; setLS(ls); participants.forEach(p=>p.paid=false);
+    renderAdminParticipants(); renderAdminPot(); alert('Done.');
   }
 }
 
 function exportCSV() {
-  const sorted = [...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
+  const sorted=[...participants].sort((a,b)=>(b.scores.total||0)-(a.scores.total||0));
   let rank=1;
-  const rows = sorted.map((p,i) => {
-    if (i>0 && p.scores.total!==sorted[i-1].scores.total) rank=i+1;
+  const rows=sorted.map((p,i)=>{
+    if(i>0&&p.scores.total!==sorted[i-1].scores.total) rank=i+1;
     const s=p.scores;
     return [rank,p.name,s.r1,s.r2,s.r3,s.cup,s.series,s.players,s.total,p.paid?'Yes':'No'];
   });
-  const csv = [['Rank','Name','R1','R2','R3','Cup','Series','Players','Total','Paid'],...rows].map(r=>r.join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = 'nhl-bracket-2026.csv'; a.click();
+  const csv=[['Rank','Name','R1','R2','R3','Cup','Series','Players','Total','Paid'],...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='nhl-bracket-2026.csv'; a.click();
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // NAV
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
 function showSection(id, e) {
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (e?.target) e.target.classList.add('active');
-  if (id==='leaderboard') renderLeaderboard();
-  if (id==='brackets')    renderViewerList();
-  if (id==='results')     renderResults();
-  if (id==='signup')      renderCountdown();
-  if (id==='admin')       { /* login gate handles render */ }
+  if(e?.target) e.target.classList.add('active');
+  if(id==='leaderboard') renderLeaderboard();
+  if(id==='brackets')    renderViewerList();
+  if(id==='results')     renderResults();
+  if(id==='signup')      renderCountdown();
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 
-ls = { ...lsDefaults(), ...getLS() };
+ls={ ...lsDef(), ...getLS() };
 renderBracket();
 renderPlayerPicks();
 </script>
