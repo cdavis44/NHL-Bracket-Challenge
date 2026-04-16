@@ -425,21 +425,22 @@ const BRACKET_OPEN_DATE = new Date('2026-04-17T00:00:00'); // ← SET YOUR DATE
 const WEST_R1 = [
   { home:'Colorado Avalanche',        away:'Los Angeles Kings' },
   { home:'Dallas Stars',         away:'Minnesota Wild' },
-  { home:'Edmonton Oilers', away:'Utah Mammoth' },
-  { home:'Vegas Golden Knights',             away:'Anaheim Ducks' },
+  { home:'Vegas Golden Knights', away:'Utah Mammoth' },
+  { home:'Edmonton Oilers',             away:'Anaheim Ducks' },
 ];
 const EAST_R1 = [
-  { home:'Buffalo Sabres',  away:'Ottawa Senators' },
+  { home:'Buffalo Sabres',  away:'Boston Bruins' },
   { home:'Montreal Canadiens',  away:'Tampa Bay Lightning' },
-  { home:'Carolina Hurricanes',  away:'Boston Bruins' },
-  { home:'Pittsburgh Penguins',  away:'TBD' },
+  { home:'Carolina Hurricanes',  away:'Ottawa Senators' },
+  { home:'Pittsburgh Penguins',  away:'Philadelphia Flyers' },
 ];
 const PLAYER_PICKS = [
-  { category:'Goals Leader',       key:'goals',   pts:1, options:[{name:'Kirill Kaprizov',team:'MIN'},{name:'Cole Caufield',team:'MON'},{name:'Leon Draisaitl',team:'EDM'}] },
-  { category:'Assists Leader',     key:'assists', pts:1, options:[{name:'Connor McDavid',team:'EDM'},{name:'Jack Eichel',team:'VGK'},{name:'Cale Makar',team:'COL'}] },
-  { category:'Save % Leader',      key:'savepct', pts:1, options:[{name:'Connor Hellebuyck',team:'WPG'},{name:'Anthony Stolarz',team:'TOR'},{name:'Jake Oettinger',team:'DAL'}] },
-  { category:'Penalty Min Leader', key:'pim',     pts:1, options:[{name:'Tom Wilson',team:'WSH'},{name:'A.J. Greer',team:'FLA'},{name:'Brady Tkachuk',team:'OTT'}] },
-  { category:'Highest Overall',    key:'overall', pts:1, options:[{name:'Mitch Marner',team:'TOR'},{name:'Nathan MacKinnon',team:'COL'},{name:'Nikita Kucherov',team:'TBL'}] },
+  { category:'Goals Leader',       key:'goals',   pts:1, options:[{name:'Kirill Kaprizov',team:'MIN'},{name:'Cole Caufield',team:'MON'},{name:'Jason Roberston',team:'DAL'}] },
+  { category:'Assists Leader',     key:'assists', pts:1, options:[{name:'Martin Necas',team:'CAR'},{name:'Jack Eichel',team:'VGK'},{name:'Leon Draisaitl',team:'EDM'}] },
+  { category:'Save % Leader',      key:'savepct', pts:1, options:[{name:'Linus Ullmark',team:'OTT'},{name:'Andrei Vasilevskiy',team:'TBL'},{name:'Jake Oettinger',team:'DAL'}] },
+  { category:'Penalty Min Leader', key:'pim',     pts:1, options:[{name:'Nikita Zadorov',team:'BOS'},{name:'Logan Stanley',team:'BUF'},{name:'Arber Xhekaj',team:'MON'}] },
+  { category:'Highest Overall Pts (fwd)',    key:'overall', pts:1, options:[{name:'Connor McDavid',team:'EDM'},{name:'Nathan MacKinnon',team:'COL'},{name:'Nikita Kucherov',team:'TBL'}] },
+  { category:'Highest Overall Pts (D-man)',    key:'overall', pts:1, options:[{name:'Evan Bouchard',team:'EDM'},{name:'Cale Makar',team:'COL'},{name:'Quinn Hughes',team:'MIN'}] },
 ];
 const RP = {r1:2,r2:3,r3:4,cup:6};
 const RL = {r1:'Round 1',r2:'Round 2',r3:'Conf. Final',cup:'Cup Final'};
