@@ -766,7 +766,12 @@ function openModal(name) {
   const cp=p.picks?.['cup'],cr=sheetResults['cup'];
   const cst=cr?.winner?(cp?.winner===cr.winner?'correct':'incorrect'):'pending';
   html+=`<div class="modal-section-title">Stanley Cup Final</div><div class="modal-picks-grid"><div class="modal-pick-item ${cst}"><div class="modal-pick-round">Cup Champion · 5pts</div><div class="modal-pick-team">${cp?.winner||'—'}</div><div class="modal-pick-games">${cp?.games?`in ${cp.games}`:''}</div></div></div>`;
-  const pr=sheetResults['_players']||{};
+  const pr = {};
+  PLAYER_PICKS.forEach(cat => {
+    if (sheetResults[`_players_${cat.key}`]) {
+      pr[cat.key] = sheetResults[`_players_${cat.key}`].winner;
+    }
+  });
   html+=`<div class="modal-section-title">Bonus Player Picks</div><div class="modal-picks-grid">`;
   PLAYER_PICKS.forEach(cat=>{
     const pp=p.playerPicks?.[cat.key];
