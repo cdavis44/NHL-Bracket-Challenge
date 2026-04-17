@@ -675,7 +675,12 @@ function calcScores(p) {
   });
   const cr=sheetResults['cup'],cp=p.picks?.['cup'];
   if(cr?.winner&&cp){if(cp.winner===cr.winner)sc.cup+=5;if(cp.games===cr.games)sc.series++;}
-  const pr=sheetResults['_players']||{};
+  const pr = {};
+  PLAYER_PICKS.forEach(cat => {
+   if (sheetResults[`_players_${cat.key}`]) {
+     pr[cat.key] = sheetResults[`_players_${cat.key}`].winner;
+  }
+  });
   PLAYER_PICKS.forEach(cat=>{if(pr[cat.key]&&p.playerPicks?.[cat.key]===pr[cat.key])sc.players++;});
   sc.total=sc.r1+sc.r2+sc.r3+sc.cup+sc.series+sc.players;
   return sc;
@@ -879,7 +884,12 @@ function renderAdminResultsForm() {
     </select>
     <input type="number" class="result-games" id="g_cup" min="4" max="7" value="${cup.games||''}" placeholder="G">
   </div>`;
-  const pr=sheetResults['_players']||{};
+  const pr = {};
+  PLAYER_PICKS.forEach(cat => {
+   if (sheetResults[`_players_${cat.key}`]) {
+     pr[cat.key] = sheetResults[`_players_${cat.key}`].winner;
+   }
+});
   html+=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Player Stat Leaders</div>`;
   PLAYER_PICKS.forEach(cat=>{
